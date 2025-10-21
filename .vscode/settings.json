@@ -17,6 +17,11 @@
         "**/__pycache__": true,
         "**/*.egg*": true,
     },
+        "ruff.interpreter": [
+    "${workspaceFolder}\\.venv\\Scripts\\python.exe"
+],
+    
+      "terminal.integrated.defaultProfile.windows": "Git Bash",
     "workbench.startupEditor": "none",
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
@@ -25,6 +30,8 @@
     "editor.minimap.enabled": false,
     "notebook.lineNumbers": "on",
     "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff", // or ms-python.black-formatter
+        "editor.formatOnSave": true,
         "diffEditor.ignoreTrimWhitespace": false,
         "editor.defaultColorDecorators": "auto",
         "editor.formatOnType": true,
