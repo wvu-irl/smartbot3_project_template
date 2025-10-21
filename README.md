@@ -28,7 +28,7 @@ Open the program [**Git Bash**](https://www.atlassian.com/git/tutorials/git-bash
 
 ```bash
 git clone --recursive https://github.com/wvu-irl/smartbot3_project_template
-cd <smartbot3_project_template>
+cd smartbot3_project_template
 ls -a
 ```
 ![clone_and_ls](docs/clone_and_ls.gif)
