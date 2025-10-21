@@ -27,8 +27,8 @@ which should report `Python 3.12.10`.
 Open the program [**Git Bash**](https://www.atlassian.com/git/tutorials/git-bash) which was installed with Git. This is minimal bash-like text shell where we will type commands. Run the following to download the template repo:
 
 ```bash
-git clone --recursive <repo_url>
-cd <dir_name>
+git clone --recursive <https://github.com/wvu-irl/smartbot3_project_template>
+cd <smartbot3_project_template>
 ls -a
 ```
 ![clone_and_ls](docs/clone_and_ls.gif)
