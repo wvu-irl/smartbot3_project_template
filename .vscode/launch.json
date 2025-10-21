@@ -1,0 +1,35 @@
+{
+    "configurations": [
+        {
+            "name": "Start: Robot",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/.vscode/noop.js",
+            "postDebugTask": "start-robot",
+            "console": "integratedTerminal",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared",
+                "focus": false,
+                "close": false,
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: ROS2 current file",
+            "type": "debugpy",
+            "preLaunchTask": "source",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        }
+    ]
+}
