@@ -1,4 +1,4 @@
-# SmartBot3 Mobile Robotics
+#git submodule update --init --recursive SmartBot3 Mobile Robotics
 
 # System Dependencies
 
@@ -85,3 +85,11 @@ To change between a simulated and real robot modify the "mode" string to be "rea
     # bot.init(drawing=True, smartbot_num=3)
 ```
 ![clone_and_ls](docs/smartbot_real_run.gif)
+
+
+# Troubleshooting
+## The dir `smartbot_irl` is empty!
+Try running the following inside of your project repo
+```bash
+git submodule update --init --recursive
+```

@@ -51,11 +51,11 @@ if __name__ == "__main__":
     (e.g. <Ctrl-c>)."""
 
     logger.info("Connecting to smartbot...")
-    bot = SmartBot(mode="real", drawing=True, smartbot_num=0)
-    bot.init(host="localhost", port=9090, yaml_path="default_conf.yml")
+    # bot = SmartBot(mode="real", drawing=True, smartbot_num=0)
+    # bot.init(host="localhost", port=9090, yaml_path="default_conf.yml")
 
-    # bot = SmartBot(mode="real", drawing=True, smartbot_num=3)
-    # bot.init(host="192.168.33.3", port=9090, yaml_path="default_conf.yml")
+    bot = SmartBot(mode="real", drawing=True, smartbot_num=2)
+    bot.init(host="192.168.33.2", port=9090, yaml_path="default_conf.yml")
 
     # bot = SmartBot(mode="sim", drawing=True, smartbot_num=3)
     # bot.init(drawing=True, smartbot_num=3)
