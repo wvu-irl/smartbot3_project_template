@@ -87,9 +87,48 @@ To change between a simulated and real robot modify the "mode" string to be "rea
 ![clone_and_ls](docs/smartbot_real_run.gif)
 
 
+# Guidance on Using `smartbot_irl`
+The main classes in the `smartbot_irl` package are `SensorData`, `Command`, and
+`SmartBot`. In the example scripts we create an instance `bot` from the
+`SmartBot` class. This `SmartBot` instance `bot` has the *methods(A.K.A
+functions)* `SmartBot.read()`, `SmartBot.write()`, and `SmartBot.spin()`. For
+the `bot` instance of `SmartBot` you will call these functions like so:
+```py
+bot=SmartBot()
+# The following would go in the step() function.
+my_sensor_data = bot.read()
+# Your algorithm here
+my_command = Command(
+    linear_vel = 0.3, # Move forward at 0.3m/s
+    angular_vel=0.4, # Rotate CCW
+    gripper_closed=True, # Close the gripper.
+) 
+bot.write(my_command)
+```
+-
+# Box2D Local Sim
+This uses the gymnasium+Box2D packages to visualize, and, optionally simulate a
+2D world with the smartbot. The 2D simulator implements a simple kinematic model
+of the robot and a simple grasping model for the hexes. The command and sensor
+data types are identical between simulation and the real SmartBot.
+
+
+
 # Troubleshooting
 ## The dir `smartbot_irl` is empty!
 Try running the following inside of your project repo
 ```bash
 git submodule update --init --recursive
 ```
+
+
+## Updating smartbot_irl
+The directory named smartbot_irl inside of your project directory is itself a
+git repo and is called a *git submodule*. To update/reset the contents of the
+smartbot_irl package you can run the following command insode of your repo:
+```
+git -C smartbot_irl reset --hard main
+git submodule update --checkout --recursive -f
+```
+
+## 
