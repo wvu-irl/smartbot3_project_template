@@ -61,7 +61,19 @@ Now to install `smartbot_irl` and dependencies **from inside the repo** run:
 
 ![venv_and_pip](docs/venv_and_pip.gif) -->
 
+# Activating Robot
+Before you can control the robot it must be powered on (using Estop and rocker switch) **and also activated by running the following script with the correct IP address**.
+```bash
+start_robot.bash 192.168.33.<num>
+```
+This will activate the hardware components in the robot (Lidar, drive motors, arm motors). 
+
+**This must be done only once until the robot is restarted or crashed**.
+
+
 # Running Code
+Before running code we must activate the robot (see previous section)!
+
 There are a few demo programs included in `src/`. You should add your scripts here as well. Let's try and run the teleop example. If we open it in the editor we can click the small "Play" button at the top right. If our venv is created correctly and we have installed all the dependencies a PyGame window should appear. Arrow keys will move the robot. The PGUP/PGDOWN keys will open/close the gripper. The keys b/n/m will cycle the arm through the DOWN/STOW/HOLD positions.
 
 You may also run the script from the gitbash shell with
@@ -131,4 +143,14 @@ git -C smartbot_irl reset --hard main
 git submodule update --checkout --recursive -f
 ```
 
-## 
+## I Can't Get Lidar or Move the Robot!
+Check the E-Stop button is off (meaning the lidar+motors have power)! When the
+E-stop is activated power is cut to the robot motors and lidar but the computer
+will still receive power (if the toggle switch is on).
+
+
+## Updating The Template Repo
+If you want to pull changes made to the template repo (not the smartbot_irl repo). Run the following in the project template directory.
+```bash
+git pull
+```
