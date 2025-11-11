@@ -28,12 +28,18 @@ def step(bot: SmartBotType):
     """This is the main control loop for the robot. Code here should run in <50ms."""
     sensors = bot.read()
 
+    # Print out sensor data.
     logger.info(sensors.odom, rate=3)
-    logger.info(sensors.imu, rate=3)
-    logger.info(sensors.aruco_poses, rate=3)
-    logger.info(sensors.manipulator_curr_preset, rate=3)
-    logger.info(sensors.gripper_curr_state, rate=3)
-    logger.info(sensors.joints, rate=3)
+    logger.info(sensors.odom.x, rate=3)
+    logger.info(sensors.odom.y, rate=3)
+    logger.info(sensors.odom.yaw, rate=3)
+
+    # logger.info(sensors.imu, rate=3)
+    # logger.info(sensors.aruco_poses, rate=3)
+    # logger.info(sensors.manipulator_curr_preset, rate=3)
+    # logger.info(sensors.gripper_curr_state, rate=3)
+    # logger.info(sensors.joints, rate=3)
+
 
     # Look at the +X lidar range.
     if sensors.scan is not None:
