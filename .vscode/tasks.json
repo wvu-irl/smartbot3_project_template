@@ -1,58 +1,137 @@
 {
-    "version": "2.0.0",
-    "tasks": [
+  "version": "2.0.0",
+  "tasks": [
         {
-            "label": "Setup Python Environment",
-            "type": "shell",
-            // Windows
-            "windows": {
-                "command": "python -m venv .venv && .venv\\Scripts\\python -m pip install --upgrade pip && .venv\\Scripts\\pip install -r requirements.txt && .venv\\Scripts\\pip install -e ./smartbot_irl/"
-            },
-            // Linux
-            "linux": {
-                "command": "python3 -m venv .venv && source .venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt && pip install -e ./smartbot_irl/"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "EXAMPLE HARD CODED SHELL COMMAND",
-            "type": "shell",
-            "command": "bash",
+      "label": "Start Robot",
+      "type": "shell",
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoLogo",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\.scripts\\start_robot_windows.ps1",
+          "${input:RobotIP}",
+          "-Mode",
+          "${input:RobotMode}"
+        ],
+        "options": {
+          "shell": {
+            "executable": "powershell.exe",
             "args": [
-                "-c",
-                "echo 'Howdy pardner'"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            }
+              "-NoLogo",
+              "-NoProfile",
+              "-ExecutionPolicy",
+              "Bypass",
+              "-Command"
+            ]
+          }
         },
-        {
-            "label": "EXAMPLE SSH hard coded command into *bare metal host of current container",
-            "type": "shell",
-            "command": "shell",
+        "linux": {
+          "command": "/usr/bin/bash",
+          "args": [
+            "${workspaceFolder}/.scripts/start_robot.bash",
+            "${input:RobotIP}",
+            "${input:RobotMode}"
+          ]
+        },
+        "problemMatcher": []
+      }
+    },
+    {
+      "label": "Setup Python Environment",
+      "type": "shell",
+      // Windows
+      "windows": {
+        "command": "python -m venv .venv; .venv\\Scripts\\python.exe -m pip install --upgrade pip; .venv\\Scripts\\pip.exe install -r requirements.txt; .venv\\Scripts\\pip.exe install -e smartbot_irl",
+        "options": {
+          "shell": {
+            "executable": "powershell.exe",
             "args": [
-                "-i",
-                "/home/smartbot/.ssh/smartbot_shared",
-                "smartbot@localhost",
-                "docker compose -f <container_file> up <service> -d"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            }
-        },
-        {
-            "label": "EXAMPLE SSH hard coded command into *bare metal host of smartbot8",
-            "type": "shell",
-            "command": "shell",
+              "-NoLogo",
+              "-NoProfile",
+              "-ExecutionPolicy",
+              "Bypass",
+              "-Command"
+            ]
+          }
+        }
+      },
+      "linux": {
+        "command": "python3 -m venv .venv && source .venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt && pip install -e ./smartbot_irl/"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Update Project Template",
+      "type": "shell",
+
+      "windows": {
+        "command": "git pull",
+        "options": {
+          "shell": {
+            "executable": "powershell.exe",
             "args": [
-                "-i",
-                "/home/smartbot/.ssh/smartbot_shared",
-                "smartbot@smartbot8",
-                "echo 'Im running on smartbot8!'"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            }
-        },
-    ]
+              "-NoLogo",
+              "-NoProfile",
+              "-ExecutionPolicy",
+              "Bypass",
+              "-Command"
+            ]
+          }
+        }
+      },
+
+      "linux": {
+        "command": "/usr/bin/bash",
+        "args": ["-c", "git pull"]
+      },
+
+      "problemMatcher": []
+    },
+    {
+      "label": "Update smartbot_irl",
+      "type": "shell",
+
+      "windows": {
+        "command": "git submodule update --init --remote --merge",
+        "options": {
+          "shell": {
+            "executable": "powershell.exe",
+            "args": [
+              "-NoLogo",
+              "-NoProfile",
+              "-ExecutionPolicy",
+              "Bypass",
+              "-Command"
+            ]
+          }
+        }
+      },
+
+      "linux": {
+        "command": "/usr/bin/bash",
+        "args": ["-c", "git submodule update --init --remote --merge"]
+      },
+
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "RobotIP",
+      "type": "promptString",
+      "description": "Enter the robot IP address",
+      "default": "192.168.33."
+    },
+    {
+      "id": "RobotMode",
+      "type": "pickString",
+      "description": "Select mode",
+      "options": ["prod", "dev"],
+      "default": "prod"
+    }
+  ]
 }

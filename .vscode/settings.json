@@ -19,8 +19,16 @@
         "ruff.interpreter": [
     "${workspaceFolder}\\.venv\\Scripts\\python.exe"
 ],
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    // "terminal.integrated.defaultProfile.windows": "PowerShell",
+    // "terminal.integrated.profiles.windows": {
+    //     "PowerShell": {
+    //         "source": "PowerShell",
+    //         "icon": "terminal-powershell"
+    //     }
+    // },
     
-      "terminal.integrated.defaultProfile.windows": "Git Bash",
+    //   "terminal.integrated.defaultProfile.windows": "Git Bash",
     "workbench.startupEditor": "none",
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
@@ -78,7 +86,7 @@
     "basedpyright.disableOrganizeImports": true,
     "basedpyright.disableTaggedHints": true,
     "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "terminal.integrated.sendKeybindingsToShell": true,
     "basedpyright.analysis.inlayHints.variableTypes": false,
