@@ -1,4 +1,4 @@
 [submodule "smartbot_irl"]
 	path = smartbot_irl
 	url = https://github.com/wvu-irl/smartbot_irl
-	branch = dev
+	branch = main
