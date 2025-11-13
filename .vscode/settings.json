@@ -13,7 +13,6 @@
         "**/.venv": true
     },
     "files.exclude": {
-        "**/.venv": true,
         "**/__pycache__": true,
         "**/*.egg*": true,
     },
