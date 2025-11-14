@@ -8,7 +8,7 @@ from smartbot_irl.data import LaserScan, list_sensor_columns
 from teleop import get_key_command
 from dataclasses import dataclass, field
 from time import time, sleep
-from smartbot_irl.drawing import LivePlotter, PlotManager, FigureWrapper
+from smartbot_irl.drawing import PlotManager, FigureWrapper
 from smartbot_irl.data import LaserScan, Frame, State, timestamp
 from smartbot_irl.utils import SmartLogger, check_realtime
 import matplotlib.pyplot as plt
@@ -107,64 +107,13 @@ def main(log_file="smartlog") -> None:
     params = Params()
     params.t0 = time()  # Start time for this run (sec)
 
-    # Set up plotting. (<var1>, <var2>, <line|scatter|>, {"option": val})
-    # plot_specs = [
-    #     [  # window 1
-    #         (
-    #             "t_elapsed",
-    #             "imu_ax",
-    #             "line",
-    #             {
-    #                 "title": "IMU X linear accel",
-    #                 "xlabel": "Time(sec)",
-    #                 "ylabel": r"$\text{m / s}^2$",
-    #                 "x_window": 5.0,
-    #             },
-    #         ),
-    #         (
-    #             "t_elapsed",
-    #             "imu_ay",
-    #             "line",
-    #             {
-    #                 "title": "IMU Y linear accel",
-    #                 "xlabel": "Time(sec)",
-    #                 "ylabel": r"$\text{m / s}^2$",
-    #                 "x_window": 5.0,
-    #             },
-    #         ),
-    #         # (
-    #         #     "t_elapsed",
-    #         #     "imu_ax",
-    #         #     "line",
-    #         #     {
-    #         #         "title": "IMU X linear Accel",
-    #         #         "xlabel": "Time(sec)",
-    #         #         "ylabel": r"$\text{RAD / s}$",
-    #         #         "x_window": 5.0,
-    #         #     },
-    #         # ),
-    #     ],
-    #     [  # window 2
-    #         (
-    #             "odom_x",
-    #             "odom_y",
-    #             "scatter",
-    #             {
-    #                 "color": "red",
-    #                 "s": 3,
-    #                 "title": "Robot Path",
-    #                 "xlabel": "X",
-    #                 "ylabel": "Y",
-    #                 "equal_aspect": True,
-    #             },
-    #         ),
-    #     ],
-    # ]
-    # plotter = LivePlotter(states, plot_specs)
+    # Set up plotting.
     pm = PlotManager()
+    # Create two windows.
     odom_fig = pm.add_figure(title="Odometry Data")
     imu_fig = pm.add_figure(title="IMU Data")
 
+    # Add line/scatter plots using columns of the `states` object.
     odom_fig.add_line(
         x_col="t_elapsed",
         y_col="odom_x",
