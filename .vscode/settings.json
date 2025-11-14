@@ -1,115 +1,109 @@
 {
-    "files.associations": {
-        "*.repos": "yaml",
-        "*.world": "xml",
-        "*.xacro": "xml",
-        "*.urdf": "xml"
-    },
-    "explorer.sortOrder": "type",
-    "search.exclude": {
-        "**/build": true,
-        "**/install": true,
-        "**/log": true,
-        "**/.venv": true
-    },
-    "files.exclude": {
-        "**/__pycache__": true,
-        "**/*.egg*": true,
-    },
-        "ruff.interpreter": [
-    "${workspaceFolder}\\.venv\\Scripts\\python.exe"
-],
-    "terminal.integrated.defaultProfile.windows": "Git Bash",
-    // "terminal.integrated.defaultProfile.windows": "PowerShell",
-    // "terminal.integrated.profiles.windows": {
-    //     "PowerShell": {
-    //         "source": "PowerShell",
-    //         "icon": "terminal-powershell"
-    //     }
-    // },
-    
-    //   "terminal.integrated.defaultProfile.windows": "Git Bash",
-    "workbench.startupEditor": "none",
-    "explorer.confirmDelete": false,
-    "explorer.confirmDragAndDrop": false,
-    "jupyter.askForKernelRestart": false,
-    "window.zoomLevel": 1,
-    "editor.minimap.enabled": false,
-    "notebook.lineNumbers": "on",
-    "[python]": {
-        "editor.defaultFormatter": "charliermarsh.ruff", // or ms-python.black-formatter
-        "editor.formatOnSave": true,
-        "diffEditor.ignoreTrimWhitespace": false,
-        "editor.defaultColorDecorators": "auto",
-        "editor.formatOnType": true,
-        "editor.wordBasedSuggestions": "off",
-    },
-    "python.experiments.enabled": false,
-    "python.languageServer": "None",
-    "notebook.cellToolbarLocation": {
-        "default": "right"
-    },
-    "remote.autoForwardPortsSource": "hybrid",
-    "basedpyright.analysis.diagnosticSeverityOverrides": {
-        "reportAttributeAccessIssue": "information",
-        "reportMissingTypeStubs": false,
-        "reportUnusedImport": false,
-        "reportUnknownParameterType": false,
-        "reportMissingParameterType": false,
-        "reportUnknownMemberType": false
-    },
-    "basedpyright.analysis.include": [
-        "."
-    ],
-    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
-    "python.envFile": "${workspaceFolder}/.env",
-    "python.terminal.activateEnvironment": true,
-    "basedpyright.analysis.extraPaths": [
-        "${workspaceFolder}/.venv/",
-        "${workspaceFolder}/src",
-        "/opt/ros/jazzy/lib/python3.10/site-packages"
-    ],
-    "basedpyright.venvPath": ".",
-    "basedpyright.venv": ".venv",
-    "basedpyright.analysis.typeCheckingMode": "basic",
-    "basedpyright.analysis.exclude": [
-        "**/build",
-        "**/.tox",
-        "**/__pycache__",
-        "**/build",
-        "**/devel",
-        "**/install",
-        "**/log",
-        "**/site-packages/matplotlib/**",
-        "**/dist-packages/matplotlib/**"
-    ],
-    "basedpyright.disableOrganizeImports": true,
-    "basedpyright.disableTaggedHints": true,
-    "[jsonc]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "terminal.integrated.sendKeybindingsToShell": true,
-    "basedpyright.analysis.inlayHints.variableTypes": false,
-    "editor.lineNumbers": "relative",
-    "basedpyright.analysis.inlayHints.functionReturnTypes": true,
-    "basedpyright.analysis.inlayHints.callArgumentNames": true,
-    "basedpyright.analysis.inlayHints.genericTypes": true,
-    "telemetry.feedback.enabled": false,
-    "clangd.path": "/usr/bin/clangd",
-    "ruff.configuration": ".vscode/ruff.toml",
-    "chat.agent.enabled": false,
-    "clang-format.style": "file",
-    "clang-format.language.cpp.enable": true,
-    "clang-format.assumeFilename": ".vscode/clang-format",
-    "clang-format.fallbackStyle": "Google",
-    "clangd.enableCodeCompletion": true,
-    "clangd.arguments": [
-        "--enable-config"
-    ],
-    "editor.stickyScroll.enabled": true,
-    "editor.stickyScroll.scrollWithEditor": true,
-    "terminal.integrated.stickyScroll.enabled": false,
-    "workbench.editor.pinnedTabsOnSeparateRow": true,
-    "workbench.editor.wrapTabs": false,
-    "explorer.autoReveal": false,
+  "files.associations": {
+    "*.repos": "yaml",
+    "*.world": "xml",
+    "*.xacro": "xml",
+    "*.urdf": "xml"
+  },
+  "explorer.sortOrder": "type",
+  "search.exclude": {
+    "**/build": true,
+    "**/install": true,
+    "**/log": true,
+    "**/.venv": true
+  },
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.egg*": true
+  },
+
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  // "terminal.integrated.defaultProfile.windows": "PowerShell",
+  // "terminal.integrated.profiles.windows": {
+  //     "PowerShell": {
+  //         "source": "PowerShell",
+  //         "icon": "terminal-powershell"
+  //     }
+  // },
+
+  //   "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "workbench.startupEditor": "none",
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "jupyter.askForKernelRestart": false,
+  "window.zoomLevel": 1,
+  "editor.minimap.enabled": false,
+  "notebook.lineNumbers": "on",
+  "[python]": {
+    // "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.defaultColorDecorators": "auto",
+    "editor.formatOnType": true,
+    "editor.wordBasedSuggestions": "off"
+  },
+  "python.experiments.enabled": false,
+  "python.languageServer": "None",
+  "notebook.cellToolbarLocation": {
+    "default": "right"
+  },
+  "remote.autoForwardPortsSource": "hybrid",
+  "basedpyright.analysis.diagnosticSeverityOverrides": {
+    "reportAttributeAccessIssue": "information",
+    "reportMissingTypeStubs": false,
+    "reportUnusedImport": false,
+    "reportUnknownParameterType": false,
+    "reportMissingParameterType": false,
+    "reportUnknownMemberType": false
+  },
+  "basedpyright.analysis.include": ["."],
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.envFile": "${workspaceFolder}/.env",
+  "python.terminal.activateEnvironment": true,
+  "basedpyright.analysis.extraPaths": [
+    "${workspaceFolder}/.venv/",
+    "${workspaceFolder}/src",
+    "/opt/ros/jazzy/lib/python3.10/site-packages"
+  ],
+  "basedpyright.venvPath": ".",
+  "basedpyright.venv": ".venv",
+  "basedpyright.analysis.typeCheckingMode": "basic",
+  "basedpyright.analysis.exclude": [
+    "**/build",
+    "**/.tox",
+    "**/__pycache__",
+    "**/build",
+    "**/devel",
+    "**/install",
+    "**/log",
+    "**/site-packages/matplotlib/**",
+    "**/dist-packages/matplotlib/**"
+  ],
+  "basedpyright.disableOrganizeImports": true,
+  "basedpyright.disableTaggedHints": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "terminal.integrated.sendKeybindingsToShell": true,
+  "basedpyright.analysis.inlayHints.variableTypes": false,
+  "editor.lineNumbers": "relative",
+  "basedpyright.analysis.inlayHints.functionReturnTypes": true,
+  "basedpyright.analysis.inlayHints.callArgumentNames": true,
+  "basedpyright.analysis.inlayHints.genericTypes": true,
+  "telemetry.feedback.enabled": false,
+  "clangd.path": "/usr/bin/clangd",
+  "ruff.configuration": ".vscode/ruff.toml",
+  "chat.agent.enabled": false,
+  "clang-format.style": "file",
+  "clang-format.language.cpp.enable": true,
+  "clang-format.assumeFilename": ".vscode/clang-format",
+  "clang-format.fallbackStyle": "Google",
+  "clangd.enableCodeCompletion": true,
+  "clangd.arguments": ["--enable-config"],
+  "editor.stickyScroll.enabled": true,
+  "editor.stickyScroll.scrollWithEditor": true,
+  "terminal.integrated.stickyScroll.enabled": false,
+  "workbench.editor.pinnedTabsOnSeparateRow": true,
+  "workbench.editor.wrapTabs": false,
+  "explorer.autoReveal": false
 }
