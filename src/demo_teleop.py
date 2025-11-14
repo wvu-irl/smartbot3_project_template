@@ -13,6 +13,7 @@ from smartbot_irl.data import LaserScan, Frame, State, timestamp
 from smartbot_irl.utils import SmartLogger, check_realtime
 import matplotlib.pyplot as plt
 
+
 logger = SmartLogger(level=logging.INFO)  # Print statements, but better!
 
 
@@ -84,7 +85,7 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     # Insert our state vector and *all* sensor data for the current timestep into the state matrix.
     state_now.update(sensors.flatten())
     states.append_row(state_now)
-    # logger.info(msg=state_now['imu_linear_acceleration_x'])
+    logger.info(msg=state_now["joints_positions"])
 
 
 def main(log_file="smartlog") -> None:
@@ -95,12 +96,12 @@ def main(log_file="smartlog") -> None:
     logger.setLevel(logging.INFO)
 
     # Connect to a real robot.
-    # bot = SmartBot(mode="real", drawing=True, smartbot_num=3)
-    # bot.init(host="192.168.33.3", port=9090, yaml_path="default_conf.yml")
+    bot = SmartBot(mode="real", drawing=True, smartbot_num=9)
+    bot.init(host="192.168.33.9", port=9090, yaml_path="default_conf.yml")
 
     # Connect to a sim robot.
-    bot = SmartBot(mode="sim", drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
-    bot.init(drawing=True, smartbot_num=3)
+    # bot = SmartBot(mode="sim", drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
+    # bot.init(drawing=True, smartbot_num=3)
 
     # Create empty parameter and state objects.
     states = State()
@@ -112,18 +113,20 @@ def main(log_file="smartlog") -> None:
     # Create two windows.
     odom_fig = pm.add_figure(title="Odometry Data")
     imu_fig = pm.add_figure(title="IMU Data")
+    joint_fig = pm.add_figure(title="Joints")
 
     # Add line/scatter plots using columns of the `states` object.
     odom_fig.add_line(
         x_col="t_elapsed",
-        y_col="odom_x",
+        y_col=["odom_x", "odom_y", "odom_z"],
         title="X Position",
         labels="odomx",
         marker="",
+        aspect="equal",
         ls="-",
         xlabel="Time (sec)",
         ylabel="Pos (m)",
-        box_aspect=1,
+        # box_aspect=1,
     )
     odom_fig.add_scatter(
         x_col="odom_x",
@@ -131,6 +134,17 @@ def main(log_file="smartlog") -> None:
         title="X-Y Position",
         marker="o",
         aspect="equal",
+        xlabel="X (m)",
+        ylabel="Y (m)",
+    )
+    # Roll, pitch, yaw
+    odom_fig.add_line(
+        x_col="t_elapsed",
+        y_col=["odom_roll", "odom_pitch", "odom_yaw"],
+        title="Odom: Roll, Pitch, Yaw",
+        labels=["odom_roll", "odom_pitch", "odom_yaw"],
+        marker="o",
+        # aspect="equal",
         xlabel="X (m)",
         ylabel="Y (m)",
     )
@@ -155,8 +169,27 @@ def main(log_file="smartlog") -> None:
         xlabel="Time (sec)",
         ylabel="RAD/s",
     )
-
-    plt.show(block=False)
+    joint_fig.add_line(
+        x_col="t_elapsed",
+        y_col=["range_forward"],
+        title="Range Forward",
+        # labels=["Positions", "Velocities"],
+        marker="",
+        # aspect="equal",
+        xlabel="Time (sec)",
+        ylabel="m",
+    )
+    joint_fig.add_line(
+        x_col="t_elapsed",
+        y_col=["joints_positions"],
+        title="Joints",
+        # labels=["Positions", "Velocities"],
+        marker="",
+        # aspect="equal",
+        xlabel="Time (sec)",
+        ylabel="RAD/s",
+    )
+    plt.show(block=False)  # Make our plots appear.
 
     logger.info(f"State Columns: {list_sensor_columns()}")
 
@@ -168,8 +201,10 @@ def main(log_file="smartlog") -> None:
             step(bot, params, states)  # Run our code.
             check_realtime(start_t=t)  # Check if our step() is taking too long.
             bot.spin()  # Get new sensor data.
+
             # Send last row of data to plotter.
             pm.update_all(states.iloc[-1])
+            sleep(0.001)
 
     except KeyboardInterrupt:
         logger.info("Shutting down...")

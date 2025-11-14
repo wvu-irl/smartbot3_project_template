@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "tasks": [
-        {
+    {
       "label": "Start Robot",
       "type": "shell",
       "windows": {
@@ -28,17 +28,17 @@
               "-Command"
             ]
           }
-        },
-        "linux": {
-          "command": "/usr/bin/bash",
-          "args": [
-            "${workspaceFolder}/.scripts/start_robot.bash",
-            "${input:RobotIP}",
-            "${input:RobotMode}"
-          ]
-        },
-        "problemMatcher": []
-      }
+        }
+      },
+      "linux": {
+        "command": "/usr/bin/bash",
+        "args": [
+          "${workspaceFolder}/.scripts/start_robot.bash",
+          "${input:RobotIP}",
+          "${input:RobotMode}"
+        ]
+      },
+      "problemMatcher": []
     },
     {
       "label": "Setup Python Environment",
@@ -67,7 +67,6 @@
     {
       "label": "Update Project Template",
       "type": "shell",
-
       "windows": {
         "command": "git pull",
         "options": {
@@ -83,18 +82,18 @@
           }
         }
       },
-
       "linux": {
         "command": "/usr/bin/bash",
-        "args": ["-c", "git pull"]
+        "args": [
+          "-c",
+          "git pull"
+        ]
       },
-
       "problemMatcher": []
     },
     {
       "label": "Update smartbot_irl",
       "type": "shell",
-
       "windows": {
         "command": "git submodule update --init --remote --merge",
         "options": {
@@ -110,12 +109,13 @@
           }
         }
       },
-
       "linux": {
         "command": "/usr/bin/bash",
-        "args": ["-c", "git submodule update --init --remote --merge"]
+        "args": [
+          "-c",
+          "git submodule update --init --remote --merge"
+        ]
       },
-
       "problemMatcher": []
     }
   ],
@@ -130,7 +130,10 @@
       "id": "RobotMode",
       "type": "pickString",
       "description": "Select mode",
-      "options": ["prod", "dev"],
+      "options": [
+        "prod",
+        "dev"
+      ],
       "default": "prod"
     }
   ]
