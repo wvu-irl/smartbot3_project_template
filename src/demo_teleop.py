@@ -64,12 +64,12 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     sensors = bot.read()
 
     # Get range directly ahead.
-    range_forward = get_range_forward(sensors.scan)
+    # range_forward = get_range_forward(sensors.scan)
     # logger.info(msg=f"{range_forward=}", rate=1)
 
     # Add a new state column named 'range_forward' if it does not already exist
     # and and insert a value.
-    state_now.update({"range_forward": range_forward})
+    # state_now.update({"range_forward": range_forward})
 
     ax = sensors.imu.ax
     ay = sensors.imu.ay
@@ -87,17 +87,19 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     states.append_row(state_now)
     logger.info(msg=state_now["joints_positions"])
 
+    logger.warn(sensors.seen_hexes)
+
 
 def main(log_file="smartlog") -> None:
     """Set up logger, smartbot connection, plotting, and data recording. Then
     run our control loop :meth:`step` forever until stopped (e.g. <Ctrl-c>)."""
 
     # See more or less information (DEBUG, INFO, WARN, ERROR).
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.WARN)
 
     # Connect to a real robot.
-    bot = SmartBot(mode="real", drawing=True, smartbot_num=9)
-    bot.init(host="192.168.33.9", port=9090, yaml_path="default_conf.yml")
+    bot = SmartBot(mode="real", drawing=True, smartbot_num=8)
+    bot.init(host="192.168.33.8", port=9090, yaml_path="default_conf.yml")
 
     # Connect to a sim robot.
     # bot = SmartBot(mode="sim", drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
@@ -156,6 +158,7 @@ def main(log_file="smartlog") -> None:
         labels=["Ax", "Ay", "Az"],
         marker="",
         # aspect="equal",
+        window=10,
         xlabel="Time (sec)",
         ylabel="m/s^2",
     )
@@ -167,18 +170,19 @@ def main(log_file="smartlog") -> None:
         marker="",
         # aspect="equal",
         xlabel="Time (sec)",
+        window=100,
         ylabel="RAD/s",
     )
-    joint_fig.add_line(
-        x_col="t_elapsed",
-        y_col=["range_forward"],
-        title="Range Forward",
-        # labels=["Positions", "Velocities"],
-        marker="",
-        # aspect="equal",
-        xlabel="Time (sec)",
-        ylabel="m",
-    )
+    # joint_fig.add_line(
+    #     x_col="t_elapsed",
+    #     y_col=["range_forward"],
+    #     title="Range Forward",
+    #     # labels=["Positions", "Velocities"],
+    #     marker="",
+    #     # aspect="equal",
+    #     xlabel="Time (sec)",
+    #     ylabel="m",
+    # )
     joint_fig.add_line(
         x_col="t_elapsed",
         y_col=["joints_positions"],
