@@ -69,7 +69,6 @@ def ant_controller(sensors, k_goal=2.0, k_avoid=5.5, base_speed=.4, avoid_thresh
         repulse /= pressure
 
 
-
     # 3. Combine goal + avoidance
     ang_vel = 0.0
     if dist_to_goal is not None:

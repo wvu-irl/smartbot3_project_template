@@ -17,6 +17,14 @@
             }
         },
         {
+            "name": "Setup Environment",
+            "type": "debugpy",
+            "request": "launch",
+            "python": "python",
+            "program": "${workspaceFolder}/setup_env.py",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Current File",
             "type": "debugpy",
             "request": "launch",

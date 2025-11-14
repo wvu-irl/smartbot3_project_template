@@ -1,114 +1,128 @@
 # demo_2dsim.py
 from dataclasses import dataclass, field
 import logging
-from pyclbr import Class
-from time import time
+
+# from pyclbr import Class
+from time import time, sleep
 import math
 from math import pi
+
+# from typing import Dict
 from smartbot_irl.robot import SmartBotType
-from smartbot_irl.utils import SmartLogger
 from smartbot_irl import Command, SensorData, SmartBot
-from smartbot_irl.data import LaserScan, Frame
+from smartbot_irl.drawing import PlotManager, FigureWrapper
+from smartbot_irl.data import LaserScan, Frame, State, timestamp
 from teleop import get_key_command
-import pandas as pd
+from smartbot_irl.utils import SmartLogger, check_realtime
 
 logger = SmartLogger(level=logging.INFO)  # Print statements, but better!
 
 
-class Params:
-    def __init__(self):
-        self.side_length: float = 2.0
-        self.speed: float = 1.0
-        self.turn_speed: float = 0.8
-        self.t0: float = 0.0
-
-
-# class State(Frame):
-#     """Student defined custom state."""
-
-#     t: pd.Series
-#     x: pd.Series
-#     y: pd.Series
-#     yaw: pd.Series
-#     v: pd.Series
-#     turning: bool = False
-#     index: int = 0
-
-
 @dataclass
-class State:
-    """Just a dataclass that holds a DataFrame and scalar values."""
+class Params:
+    """Put unchanging named values in here. Useful for "hyper parameter" kinds of values determining
+    how your code will behave.
+    """
 
-    state_vec: pd.DataFrame = field(
-        default_factory=lambda: pd.DataFrame(columns=["t", "x", "y", "yaw", "v"])
-    )
-    index: int = 0
-    t_elapsed: float = 0.0
-    t_prev: float = 0.0
-    turning: bool = False
-
+    side_length: float = 2.0
+    speed: float = 1.0
+    turn_speed: float = 0.8
+    t0: float = 0.0
 
 
-def step(bot: SmartBotType, params: Params, state: State, t: float):
+def step(bot: SmartBotType, params: Params, states: State) -> None:
     """Drive a box"""
-    index = state.index
-    # state_now = state.state_vec.iloc[state.index] # Grab current row.
+    t = time()  # Current time (sec)
 
+    # Get latest sensor data
+    sensors = bot.read()
+
+    # Get the last row of state data from the states dataframe.
+    state_prev = states.last
+
+    # Time driven since last state change.
+    t_elapsed = t - state_prev.t_prev
+
+    state_now = {
+        "t_epoch": t,
+        "time": t - params.t0,
+        "t_prev": state_prev.t_prev,
+        "t_elapsed": t_elapsed,
+        "turning": state_prev.turning,
+    }
+
+    # Create an empty Command type object to be populated and then sent to the robot.
     cmd = Command()
-    t_elapsed = t - state.t_prev
 
-    if not state.turning:
-        # Drive forward.
+    # Simple open-loop time based state machine.
+    if not state_prev.turning:
         cmd.linear_vel = params.speed
         cmd.angular_vel = 0.0
 
-        # Check how far we've gone.
         if t_elapsed * params.speed >= params.side_length:
-            state.turning = True
-            state.t_prev = t
+            state_now["turning"] = True
+            state_now["t_prev"] = t
     else:
         cmd.linear_vel = 0.0
         cmd.angular_vel = params.turn_speed
 
-        # Check how far we've turned.
         if t_elapsed * params.turn_speed >= pi / 2:
-            state.turning = False
-            state.t_prev = t
-    state.index += 1
+            state_now["turning"] = False
+            state_now["t_prev"] = t
+    logger.info(sensors.odom)
+    state_now["x"] = sensors.odom.x
+    state_now["y"] = sensors.odom.y
+    state_now["my_val"] = sensors.odom.yaw
+
+    # Save the current states data vector to the states dataframe.
+    states.append_row(rowdict=state_now)
+
+    # Print out the last row of state vector data.
+    logger.debug(msg=states.iloc[-1])
+
+    # Send our commands to the robot.
     bot.write(cmd)
 
 
-if __name__ == "__main__":
-    """ Create an instance of the SmartBot wrapper class for your specific
-    smartbot. Then we run our control loop :meth:`step` forever until stopped
-    (e.g. <Ctrl-c>)."""
+def main(log_file="smartlog") -> None:
+    """Set up logger, smartbot connection, plotting, and data recording. Then
+    run our control loop :meth:`step` forever until stopped (e.g. <Ctrl-c>)."""
 
-    logger.info("Connecting to smartbot...")
-    # bot = SmartBot(mode="real", drawing=True, smartbot_num=0)
-    # bot.init(host="localhost", port=9090, yaml_path="default_conf.yml")
+    # See more or less information (DEBUG, INFO, WARN, ERROR).
+    logger.setLevel(logging.WARN)
 
+    # Connect to a real robot.
     # bot = SmartBot(mode="real", drawing=True, smartbot_num=3)
     # bot.init(host="192.168.33.3", port=9090, yaml_path="default_conf.yml")
 
-    bot = SmartBot(mode="sim", drawing=True, smartbot_num=3)
+    # Connect to a sim robot.
+    bot = SmartBot(mode="sim", drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
     bot.init(drawing=True, smartbot_num=3)
 
-    state = State()
+    # Create empty parameter and state objects.
+    states = State()
     params = Params()
-    params.t0 = time()  # Starting time (sec)
-
+    params.t0 = time()  # Start time for this run (sec)
+    # Run the robot!
+    #######################################
     try:
         while True:
             t = time()  # Get current time (sec).
-
-            # Run your code.
-            step(bot, params, state, t)
-
-            dt = time() - t  # Check if your code is running fast enough.
-            if dt > 0.05:
-                logger.warn(f"Loop took {dt:2f}s!", rate=1)
-
+            step(bot, params, states)  # Run our code.
+            check_realtime(start_t=t)  # Check if our step() is taking too long.
             bot.spin()  # Get new sensor data.
+            plotter.update()
+
     except KeyboardInterrupt:
-        print("Shutting down...")
+        # Save data to a CSV file and cleanup ros+matplotlib objects.
+        logger.info("Shutting down...")
+
+        log_filename = f"{log_file}_{timestamp()}.csv"
+        states.to_csv(log_filename)
+
+        logger.info(f"Done saving to {log_filename}")
         bot.shutdown()
+
+
+if __name__ == "__main__":
+    main()

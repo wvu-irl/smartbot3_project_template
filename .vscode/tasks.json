@@ -1,228 +1,140 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "start-robot",
-            "type": "shell",
-            "command": "bash",
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Robot",
+      "type": "shell",
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoLogo",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\.scripts\\start_robot_windows.ps1",
+          "${input:RobotIP}",
+          "-Mode",
+          "${input:RobotMode}"
+        ],
+        "options": {
+          "shell": {
+            "executable": "powershell.exe",
             "args": [
-                "-lc",
-                "./.scripts/start_robot.sh",
-                "setsid -i </proc/$$/fd/0 >/proc/$$/fd/1 2>/proc/$$/fd/2 bash & disown; exit 0"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "presentation": {
-                "reveal": "always",
-                "panel": "dedicated",
-                "focus": false,
-                "close": true,
-                "showReuseMessage": false,
-                "clear": true
-            }
-        },
-        {
-            "label": "EXAMPLE HARD CODED SHELL COMMAND",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "echo 'Howdy pardner'"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            }
-        },
-        {
-            "label": "EXAMPLE SSH hard coded command into *bare metal host of current container",
-            "type": "shell",
-            "command": "shell",
-            "args": [
-                "-i",
-                "/home/smartbot/.ssh/smartbot_shared",
-                "smartbot@localhost",
-                "docker compose -f <container_file> up <service> -d"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            }
-        },
-        {
-            "label": "EXAMPLE SSH hard coded command into *bare metal host of smartbot8",
-            "type": "shell",
-            "command": "shell",
-            "args": [
-                "-i",
-                "/home/smartbot/.ssh/smartbot_shared",
-                "smartbot@smartbot8",
-                "echo 'Im running on smartbot8!'"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            }
-        },
-        {
-            "label": "colcon build",
-            "type": "shell",
-            "command": "colcon",
-            "args": [
-                "build",
-                "--symlink-install",
-                "--cmake-args",
-                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-                "-DCMAKE_EXPORT_COMPILE_COMMANDS=On"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "group": "build",
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "source_global",
-            "detail": "Source global overlay",
-            "type": "shell",
-            "command": "source /opt/ros/${ROS_DISTRO}/setup.bash",
-            "problemMatcher": []
-        },
-        {
-            "label": "source",
-            "detail": "Source workspace overlay",
-            "type": "shell",
-            "command": "source ${workspaceFolder}/install/setup.bash",
-            "problemMatcher": []
-        },
-        {
-            "label": "clean",
-            "detail": "Delete build, install and log",
-            "type": "shell",
-            "command": "rm -rf build install log",
-            "problemMatcher": []
-        },
-        {
-            "label": "cpplint",
-            "detail": "Lint files with cpplint.",
-            "type": "ament",
-            "task": "cpplint",
-            "path": "src/",
-            "problemMatcher": "$ament_cpplint",
-            "presentation": {
-                "panel": "dedicated",
-                "reveal": "silent",
-                "clear": true
-            }
-        },
-        {
-            "label": "cppcheck",
-            "detail": "Run static code checker cppcheck.",
-            "type": "ament",
-            "task": "cppcheck",
-            "path": "src/",
-            "problemMatcher": "$ament_cppcheck",
-            "presentation": {
-                "panel": "dedicated",
-                "reveal": "silent",
-                "clear": true
-            },
-            "options": {
-                "env": {
-                    "AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS": "1"
-                }
-            }
-        },
-        {
-            "label": "lint_cmake",
-            "detail": "Run lint on cmake files.",
-            "type": "ament",
-            "task": "lint_cmake",
-            "path": "src/",
-            "problemMatcher": "$ament_lint_cmake",
-            "presentation": {
-                "panel": "dedicated",
-                "reveal": "silent",
-                "clear": true
-            }
-        },
-        {
-            "label": "flake8",
-            "detail": "Run flake8 on python files.",
-            "type": "ament",
-            "task": "flake8",
-            "path": "src/",
-            "problemMatcher": "$ament_flake8",
-            "presentation": {
-                "panel": "dedicated",
-                "reveal": "silent",
-                "clear": true
-            }
-        },
-        {
-            "label": "pep257",
-            "detail": "Run pep257 on python files.",
-            "type": "ament",
-            "task": "pep257",
-            "path": "src/",
-            "problemMatcher": "$ament_pep257",
-            "presentation": {
-                "panel": "dedicated",
-                "reveal": "silent",
-                "clear": true
-            }
-        },
-        {
-            "label": "xmllint",
-            "detail": "Run xmllint on xml files.",
-            "type": "ament",
-            "task": "xmllint",
-            "path": "src/",
-            "problemMatcher": "$ament_xmllint",
-            "presentation": {
-                "panel": "dedicated",
-                "reveal": "silent",
-                "clear": true
-            }
-        },
-        {
-            "label": "clang-format",
-            "type": "shell",
-            "command": "find",
-            "args": [
-                "${workspaceFolder}/src", // Start searching from the src directory
-                "-type",
-                "f", // Only look for files (not directories)
-                "-name",
-                "*.cpp", // Find all .cpp files
-                "-or",
-                "-name",
-                "*.h", // Or find all .h header files
-                "-exec",
-                "clang-format", // For each file, run clang-format
-                "-i",
-                "{}", // In-place formatting
-                ";"
-            ],
-            "group": "build",
-            "problemMatcher": [],
-            "presentation": {
-                "panel": "dedicated",
-                "reveal": "silent",
-                "clear": true
-            }
-        },
-        {
-            "label": "lint all",
-            "detail": "Run all linters.",
-            "dependsOn": [
-                "cppcheck",
-                "cpplint",
-                "flake8",
-                "lint_cmake",
-                "pep257",
-                "xmllint",
-                "uncrustify"
-            ],
-            "problemMatcher": []
+              "-NoLogo",
+              "-NoProfile",
+              "-ExecutionPolicy",
+              "Bypass",
+              "-Command"
+            ]
+          }
         }
-    ]
+      },
+      "linux": {
+        "command": "/usr/bin/bash",
+        "args": [
+          "${workspaceFolder}/.scripts/start_robot.bash",
+          "${input:RobotIP}",
+          "${input:RobotMode}"
+        ]
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Setup Python Environment",
+      "type": "shell",
+      // Windows
+      "windows": {
+        "command": "python -m venv .venv; .venv\\Scripts\\python.exe -m pip install --upgrade pip; .venv\\Scripts\\pip.exe install -r requirements.txt; .venv\\Scripts\\pip.exe install -e smartbot_irl",
+        "options": {
+          "shell": {
+            "executable": "powershell.exe",
+            "args": [
+              "-NoLogo",
+              "-NoProfile",
+              "-ExecutionPolicy",
+              "Bypass",
+              "-Command"
+            ]
+          }
+        }
+      },
+      "linux": {
+        "command": "python3 -m venv .venv && source .venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt && pip install -e ./smartbot_irl/"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Update Project Template",
+      "type": "shell",
+      "windows": {
+        "command": "git pull",
+        "options": {
+          "shell": {
+            "executable": "powershell.exe",
+            "args": [
+              "-NoLogo",
+              "-NoProfile",
+              "-ExecutionPolicy",
+              "Bypass",
+              "-Command"
+            ]
+          }
+        }
+      },
+      "linux": {
+        "command": "/usr/bin/bash",
+        "args": [
+          "-c",
+          "git pull"
+        ]
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Update smartbot_irl",
+      "type": "shell",
+      "windows": {
+        "command": "git submodule update --init --remote --merge",
+        "options": {
+          "shell": {
+            "executable": "powershell.exe",
+            "args": [
+              "-NoLogo",
+              "-NoProfile",
+              "-ExecutionPolicy",
+              "Bypass",
+              "-Command"
+            ]
+          }
+        }
+      },
+      "linux": {
+        "command": "/usr/bin/bash",
+        "args": [
+          "-c",
+          "git submodule update --init --remote --merge"
+        ]
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "RobotIP",
+      "type": "promptString",
+      "description": "Enter the robot IP address",
+      "default": "192.168.33."
+    },
+    {
+      "id": "RobotMode",
+      "type": "pickString",
+      "description": "Select mode",
+      "options": [
+        "prod",
+        "dev"
+      ],
+      "default": "prod"
+    }
+  ]
 }
