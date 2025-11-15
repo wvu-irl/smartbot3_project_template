@@ -8,6 +8,11 @@ https://raw.githubusercontent.com/wvu-irl/smartbot3_project_template/dev/docs/vi
   <source src="https://raw.githubusercontent.com/wvu-irl/smartbot3_project_template/dev/docs/videos/demo.webm">
 </video>
 
+<video controls width="1000">
+  <source src="https://github.com/wvu-irl/smartbot3_project_template/blob/dev/docs/videos/demo_2.mp4?raw=1" type="video/mp4">
+</video>
+
+
 # Installing System Dependencies 
 Your computer must have some minimal software packages installed before the
 SmartBots can be used. Linux and windows are both supported. A mainstream Linux distro is
