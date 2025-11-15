@@ -1,5 +1,117 @@
 # SmartBot3
 
+# Quickstart
+
+If you already have `git` installed you can clone this repo using the following command:
+
+```bash
+git clone --recursive https://github.com/wvu-irl/smartbot3_project_template
+```
+
+If you don't have `git` see [Installing System Dependencies](#installing-system-dependencies).
+
+<br>
+
+# I am Confused and Angry About Typing Commands
+<details>
+`¯\_(ツ)_/¯`
+
+## The Text Shell
+
+A shell is any program you use to interface with a computer. A **text shell**
+is, as the name implies, a text-only computer interface. Other common names are
+"command prompt", "terminal", "tty". A common shell in linux is `Bash`, windows
+has powershell and CMD. A **graphical shell** is how computers are most commonly
+used today (buttons, windows, mouse cursor, etc).
+
+Graphical shells are easy to learn and can be very effective. However, for the
+shallow learning curve and high abstractness of a graphical shell we pay a
+price. In a graphical shell if is no button or menu for what we want to do, _we
+simply cannot do it_. A text shell will give you the freedom to do as you please
+on your own terms provided you are willing to struggle.
+
+Text shells are hard to learn in the same way language is hard to learn. There
+is some upfront memorization necessary before you can do/say anything
+non-trivial. Very quickly learning transitions away from memorization and
+becomes exploration, play.
+
+Eventually, rather than invoking the base set of commands as monosyllabic sentences
+([holophrastics](https://en.wikipedia.org/wiki/Holophrasis)) you compose them.
+This is not just a matter of efficiency but of being able to say entirely new
+things. For example,
+
+> "How many lines of text are there in all the python files in the current
+> directory?"
+
+becomes,
+
+```sh
+wc -l *.py
+```
+
+This is where the real power of a text interface arises. The translation of
+human desire to a sequence of characters is less arcane when viewed through the
+lens of sentence formation.
+
+But just like "go", "to", and "hi" never stop being useful in human language the
+base commands `cd`, `ls`, `du`, etc never stop being useful in the shell.
+Fortunately the actions we need to learn how to do in the shell are relatively
+few and we can quickly memorize the commands we will be repeating most often.
+
+## The Prompt
+Shells have many different froms of "prompts". A prompt is a metaphorical object where you provide your input and where additional details may be presented. Commonly the prompt will show you your username along with the **current working directory** (i.e. where you are in the filesystem). This is important as many commands depend on *where they are run*. 
+
+```bash
+username@hostname:directory$
+```
+
+Often we give **file paths** to a command and this will be affected by where the command and file path are ran.
+
+## Common Commands
+A comprehensive list of shell commands is beyond the scope of this repository. The available commands and keymaps may also vary depending on the system you are using. Fortunately there are many resources online for this, see [further reading](#further-reading) below.
+
+* `pwd` print the **current working directory**
+* `ls` list files in the **current working directory**
+* `cd <path/to/file` Change Directory into the target path
+* `cd ~` Move to your users HOME directory 
+* `rm <file>` Delete a file
+* `rm -rf` Delete a directory and its files
+* `clear` clear the screen
+
+Keymaps/Shortcuts. These are pressed *simultaneously*:
+* `ctrl-c` Use to kill a process (SIGINT)
+* `Ctrl-Shift-c` Copy
+* `Ctrl-Shift-v` Paste
+* `ctrl-d` 
+* `ctrl-e` Move cursor to end of line
+* `ctrl-a` Move cursor to beginning of line
+
+## Copying Command Examples
+Angle brackets `<>` will be used to denote an argument that is mandatory. The string inside the brackets is semantically desriptive. Do not type the brackets when actually writing the command.
+
+```bash
+cd <path/to/dir>
+```
+will become something like,
+```bash
+cd src/
+```
+<br>
+
+Square brackets `[ ]` are often used to indicate optional arguments and should be interpreted the same as angle brackets otherwise.
+
+Further Reading:
+- https://linuxjourney.com/lesson/the-shell
+- [In the Beginning... Was the Command Line](https://web.stanford.edu/class/cs81n/command.txt)
+- [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)
+- https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form
+- https://cheat.sh/
+- https://devhints.io/bash
+- https://en.wikipedia.org/wiki/Everything_is_a_file
+</details>
+
+<br>
+
 # Installing System Dependencies
 
 Your computer must have some minimal software packages installed before the
@@ -45,8 +157,9 @@ which should report `Python 3.12.10`.
 
 ## Windows Dependencies
 
-<details open win_deps>
+<details win_deps>
     <summary>Details</summary>
+
 The following packages are needed:
 
 - [Git](https://git-scm.com/install/windows) (will install "Git" as well as "Git Bash".)
@@ -57,47 +170,52 @@ The following packages are needed:
 
 Download and install Git for windows.
 
-<!-- <img src='docs/images/win_git_download.png' style="width:600;  height:auto;"> -->
-<!-- <img src='docs/gifs/gitbash_install.gif' style="width:600;  height:auto;"> -->
-<div style="display: flex; gap: 20px; align-items: center;">
-
 <img src='docs/images/win_git_download.png' style="width:600;  height:auto;">
-<img src='docs/gifs/gitbash_install.gif' style="width:600;  height:auto;">
+<img src='docs/gifs/gitbash_install.gif' style="width:800;  height:auto;">
 
-</div>
-
-<!-- ![git_for_windows](docs/gifs/gitbash_install.gif) -->
+<br>
 
 ### Python:
 
-Download and install the _Python Install Manager_. Then install **python3.12** using the Python Install Manager by running the following command in a command prompt shell (CMD).
+- Download **Python Install Manager**. This will install Python3.14 automatically.
+- Choose 'y' when prompted to add commands directory to your PATH
+- Chose 'y' when prompted to install the CPython runtime.
+- Check that python3.12 was installed.
+
+<img src="docs/images/win_download_py_manager.png" style="max-width:600px; height:auto;">
+
+<img src="docs/images/win_py_manager_steps.png" style="max-width:600px; height:auto;">
+
+Then install **python3.12** using the Python Install Manager by running the following command in a command prompt shell (CMD).
 
 ```bash
 py install 3.12
 ```
 
-<div style="display: flex; gap: 20px; align-items: center;">
+<img src="docs/images/win_py_install.png" style="max-width:600px; height:auto;">
 
-<img src="docs/images/win_download_py_manager.png"
-       style="max-width:400px; height:auto;">
+See the following gif for details if you are confused.
+<img src='docs/gifs/win_py_install.gif' style="width:800;  height:auto;">
 
-<img src="docs/images/win_py_manager_steps.png"
-       style="max-width:400px; height:auto;">
+Check that python3.12 was installed correctly by running the following in a shell:
 
-</div>
-
-### Check that python was installed correctly
-
-After installing python3.12 check python is installed, runnable, and the correct
-version by running the following in a shell:
-
-```sh
-python --version
+```bash
+python3.12 --version
+# Python 3.12.10
 ```
 
 which should report `Python 3.12.10`.
 
+<br>
+
+### VSCode:
+
+Install like you would any program. If you are confused see the following gif for details.
+<img src='docs/gifs/win_vs_install.gif' style="width:800;  height:auto;">
+
 </details>
+
+<br>
 
 # Setting Up Your Workspace
 
@@ -217,8 +335,8 @@ git submodule update --init --recursive
 
 ## Updating smartbot_irl
 
-The directory named smartbot_irl inside of your project directory is itself a
-git repo and is called a _git submodule_. To update/reset the contents of the
+The directory named smartbot*irl inside of your project directory is itself a
+git repo and is called a \_git submodule*. To update/reset the contents of the
 smartbot_irl package you can run the following command insode of your repo:
 
 ```
