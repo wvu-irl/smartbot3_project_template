@@ -1,9 +1,9 @@
  # SmartBot3
 
-https://github.com/wvu-irl/smartbot3_project_template/raw/refs/heads/dev/docs/videos/mov.mp4
+https://github.com/wvu-irl/smartbot3_project_template/raw/refs/heads/dev/docs/videos/demo_2.mp4
 
 <video controls width="1000">
-  <source src="https://github.com/wvu-irl/smartbot3_project_template/raw/refs/heads/dev/docs/videos/mov">
+  <source src="https://github.com/wvu-irl/smartbot3_project_template/raw/refs/heads/dev/docs/videos/demo_2.mp4">
 </video>
 
 # Installing System Dependencies 
