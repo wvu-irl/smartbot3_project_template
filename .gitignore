@@ -1,4 +1,8 @@
 *.csv
+*.gif
+*.webm
+*.mp4
+*.png
 
 *devel/
 *logs/

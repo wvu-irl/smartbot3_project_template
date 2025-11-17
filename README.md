@@ -3,29 +3,32 @@
 <br>
 
 # Useful Commands and Keymaps
+
 <details>
 A comprehensive list of shell commands is beyond the scope of this repository. The available commands and keymaps may also vary depending on the system you are using. Fortunately there are many resources online for this, see [further reading](#further-reading) below.
 
-* `pwd` print the **current working directory**
-* `ls` list files in the **current working directory**
-* `cd <path/to/file` Change Directory into the target path
-* `cd ~` Move to your users HOME directory 
-* `rm <file>` Delete a file
-* `rm -rf` Delete a directory and its files
-* `clear` clear the screen
+- `pwd` print the **current working directory**
+- `ls` list files in the **current working directory**
+- `cd <path/to/file` Change Directory into the target path
+- `cd ~` Move to your users HOME directory
+- `rm <file>` Delete a file
+- `rm -rf` Delete a directory and its files
+- `clear` clear the screen
 
-Keymaps/Shortcuts. These are pressed *simultaneously*:
-* `ctrl-c` Use to kill a process (SIGINT)
-* `Ctrl-Shift-c` Copy
-* `Ctrl-Shift-v` Paste
-* `ctrl-d` 
-* `ctrl-e` Move cursor to end of line
-* `ctrl-a` Move cursor to beginning of line
+Keymaps/Shortcuts. These are pressed _simultaneously_:
+
+- `ctrl-c` Use to kill a process (SIGINT)
+- `Ctrl-Shift-c` Copy
+- `Ctrl-Shift-v` Paste
+- `ctrl-d`
+- `ctrl-e` Move cursor to end of line
+- `ctrl-a` Move cursor to beginning of line
 </details>
 
 <br>
 
 # I am Confused and Angry About Typing Commands
+
 <details>
 `¯\_(ツ)_/¯`
 
@@ -72,7 +75,8 @@ Fortunately the actions we need to learn how to do in the shell are relatively
 few and we can quickly memorize the commands we will be repeating most often.
 
 ## The Prompt
-Shells have many different forms of "prompts". A prompt is a metaphorical object where you provide your input and where additional details may be presented. Commonly the prompt will show your username along with the **current working directory** (i.e. where you are in the filesystem). This is important as the behaviour of many commands depends on *where they are run*. 
+
+Shells have many different forms of "prompts". A prompt is a metaphorical object where you provide your input and where additional details may be presented. Commonly the prompt will show your username along with the **current working directory** (i.e. where you are in the filesystem). This is important as the behaviour of many commands depends on _where they are run_.
 
 ```bash
 username@hostname:directory$
@@ -80,23 +84,26 @@ username@hostname:directory$
 
 Often we give **file paths** to a command and this will be affected by where the command and file path are ran.
 
-
-
 ## Copying Command Examples
+
 Angle brackets `<>` will be used to denote an argument that is mandatory. The string inside the brackets is semantically desriptive. Do not type the brackets when actually writing the command.
 
 ```bash
 cd <path/to/dir>
 ```
+
 will become something like,
+
 ```bash
 cd src/
 ```
+
 <br>
 
 Square brackets `[ ]` are often used to indicate optional arguments and should be interpreted the same as angle brackets otherwise.
 
 ## Further Reading:
+
 - https://linuxjourney.com/lesson/the-shell
 - [In the Beginning... Was the Command Line](https://web.stanford.edu/class/cs81n/command.txt)
 - [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)
@@ -163,7 +170,7 @@ The following packages are needed:
 - [Python3.12 (Via Python Install Manager)](https://www.python.org/downloads/release/pymanager-250/)
 - [VSCode](https://code.visualstudio.com/download)
 
-### Git:
+### Git install for windows:
 
 Download and install Git for windows.
 
@@ -174,12 +181,13 @@ See the following gif for details if you are confused.
 
 <br>
 
-### Python:
+### Python install for windows:
 
-- Download **Python Install Manager**. This will install Python3.14 automatically.
+- Download **Python Install Manager**. This will install Python3.14 automatically
 - Choose 'y' when prompted to add commands directory to your PATH
-- Chose 'y' when prompted to install the CPython runtime.
-- Check that python3.12 was installed.
+- Chose 'y' when prompted to install the CPython runtime
+- Run `py install 3.12` in a shell
+- Check that 1python3.121 was installed
 
 <img src="docs/images/win_download_py_manager.png" style="max-width:600px; height:auto;">
 
@@ -207,7 +215,7 @@ which should report `Python 3.12.10`.
 
 <br>
 
-### VSCode:
+### VSCode install for windows:
 
 Install like you would any program. If you are confused see the following gif for details.
 <img src='./docs/gifs/win_vs_install.gif' style="width:800;  height:auto;">
@@ -220,57 +228,198 @@ Install like you would any program. If you are confused see the following gif fo
 
 - Clone the repo using git
 - Open the `smartbot3_project_template` folder in VSCode
+- Install workspace recommended extensions
+- Open a VSCode terminal (shell)
 - Create a python [virtual environment](https://peps.python.org/pep-0405/) (venv)
-- Install python dependencies and the python package  `smartbot_irl` (included inside the repo) into the virtual environment
+- Install python dependencies and the python package `smartbot_irl` (included as
+  a subrepo(submodule) inside the repo) into the virtual environment
+
+## Clone the repo using git
 
 Clone this repo with the following command (note the --recursive flag!):
+
 ```bash
 git clone --recursive https://github.com/wvu-irl/smartbot3_project_template
 ```
 
+This repo includes _another repo_ `smartbot_irl` which is a python package used to control the IRL SmartBot.
 See the following gif for details if you are confused.
-<img src='./docs/gifs/clone_and_ls.gif' style="width:800;  height:auto;">
+<img src='./docs/gifs/win_clone_repo.gif' style="width:800;  height:auto;">
 
+## Open the `smartbot3_project_template` folder in VSCode
 
-This repo includes the `smartbot_irl` python package which we will use to control the IRL SmartBot. We will use a python **virtual environment** in our repos so that we can more easily install python packages. To create a virtual environment directory named `.venv` we will use VSCodes built in python tools.
+Now, let's open VSCode to the directory for the reop we have just cloned. **When prompted to install recommended extensions, click yes**. See the following gif for details if you are confused.
+<img src='./docs/gifs/win_vsc_extensions_open.gif' style="width:800;  height:auto;">
 
-Open VSCode and select **"Open Folder"** on the cloned repo. Install any recommended extensions. Then open the **command palette** with the keymap `<Ctrl-Shift-p>` and type `environment`. Select `Python: Create Environment` -> `Venv`. Wait for the packages in `requirements.txt to be installed to our venv.
-![clone_and_ls](./docs/gifs/open_pip_requirements.gif)
+## Install workspace recommended extensions
 
-Now we will install the `smartbot_irl` package to our venv as well so we can use it in our code. To do this open a terminal (check that the venv is active by looking for text like `(venv)` ) in vscode and run the following **inside the repo**.
+If the prompt to install recommended extensions did not appear or if you want to check for newly added recommended extensions you can search for `@recommended` in the "Extensions" menu. To download all recommended extensions click the small download button under the search bar.
+<img src='./docs/images/vsc_ext_download.png' style="max-width:300;  height:auto;">
 
+## Open a VSCode terminal (shell)
+
+This can be done by going to the menu `View->Terminal`. Alternatively the keymap `` Ctrl-`  `` will toggle the terminal pane open/closed.
+
+We can have VSC open a variety of shells. On windows we can select from gitbash, CMD, and powershell. You may do this by clicking on the small down arrow at the top of the terminal pane.
+<img src='./docs/images/vsc_new_shell.png' style="max-width:300;  height:auto;">
+
+We can make additional terminal windows here if desired. Alternatively, the keymap `` Ctrl-Shift-`  `` will also do this.
+
+<img src='./docs/images/vsc_new_shell2.png' style="max-width:300;  height:auto;">
+
+## Create a python virtual environment (venv)
+
+> **Note**: Windows makes using python and venvs more cumbersome. Instructions
+> found online will be primarily aimed at Linux and may not work for windows.
+
+Before we can can use the `smartbot_irl` package to send and receive data from
+the SmartBot we must make it importable for our python code.
+
+We will use a python [virtual environment](https://peps.python.org/pep-0405/) in
+our project so that we can more easily manage python dependencies. There are two
+options for creating and manage venvs: Shell commands and VSCodes built in
+tools. Both are shown here.
+
+### Linux Venv
+
+<details linux>
+
+</details linux>
+
+### Windows Venv
+
+<details open>
+
+### Option 1: Setting up a venv using the shell
+
+> Make sure to run the following commands from inside the top level of the `smartbot3_project_template` you cloned!
+
+To create a python3.12 venv in a directory named `.venv` use the command:
+
+```bash
+python3.12 -m venv .venv
 ```
-pip install -e smartbot_irl
+
+<details >
+    <summary>See the following gif for details if you are confused.</summary>
+<img src='./docs/gifs/win_venv_install.gif' style="max-width:700;  height:auto;">
+</details>
+<br>
+
+Then install python dependencies using `pip.exe` inside of the `.venv` directory:
+
+```bash
+.venv/Scripts/pip.exe install -r requirements.txt
 ```
 
-This will make an editable install of the `smartbot_irl` to your venv. To see if the venv is active look for text like `(venv)` in your terminal. If it is not active them your python code will not be able to find the packages we have installed
-![clone_and_ls](./docs/gifs/smartbot_install.gif)
+<details>
+    <summary>See the following gif for details if you are confused.</summary>
+<img src='./docs/gifs/win_venv_req_install.gif' style="max-width:700;  height:auto;">
+</details>
+<br>
+
+Then install the `smartbot_irl` package using:
+
+```bash
+.venv/Scripts/pip.exe install -e smartbot_irl
+```
+
+<details>
+    <summary>See the following gif for details if you are confused.</summary>
+<img src='./docs/gifs/win_venv_smartbot_install.gif' style="max-width:700;  height:auto;">
+</details>
+
+### Option 2: Setting up a venv using VSCode
+
+<details vscopt>
+</details vscopt>
+
+</details win>
+
+<br>
 
 # Activating Robot
 
-Before you can control the robot it must be powered on (using Estop and rocker switch) **and also activated by running the following script with the correct IP address**.
+Before you can control the robot we must perform several steps.
+
+- Powering On the Robot
+- Start hardware interface on the robot
+
+## Powering On the Robot
+
+Find the big red button and rotate it CCW until it pops out ~1/4 inch and clicks. This will provide power to the motors and lidar. Power to the computer (Jetson) is provided seperately by the rocker switch. Turn this on by pushing down on the side marked with a `|`.
+
+[Add picture](!foo)
+
+To check if the jetson is powered, open the vanity plate (the lid) and look for a green light on the computer.
+
+[Add picture](!foo)
+
+## Start hardware interface on the robot
+
+Before the robot will respond to commands the hardware interface code _on the robot_ must be running. Fortunately this has been greatly simplified. We can star the hardware interface with two methods: A VSCode task or the shell.
+
+### Start hardware interface with VSCode task
+
+<details open>
+
+If the "Fast Tasks" extension was installed then several buttons will be available in the "Explorer" pane which will automate the process of starting the robot.
+
+<img src='./docs/images/start_robot_vsc.png' style="max-width:300;  height:auto;">
+
+<details>
+    <summary>See the following gif for details if you are confused.</summary>
+<img src='./docs/gifs/.gif' alt="TODO" style="max-width:700;  height:auto;">
+
+</details>
+</details>
+
+### Start hardware interface with shell
+
+<details vscopt>
+Rather than using the VSCode task we can manually invoke the shell/powershell scripts that connect to the robot.
+
+For linux:
 
 ```bash
-start_robot.bash 192.168.33.<num>
+bash .scripts/start_robot.bash 192.168.33.<your_robot_num> prod
 ```
 
-This will activate the hardware components in the robot (Lidar, drive motors, arm motors).
+For windows:
 
-**This must be done only once until the robot is restarted or crashed**.
+```bash
+.scripts/start_robot_windows 192.168.33.<your_robot_num> prod
+```
+
+<details open>
+    <summary>See the following gif for details if you are confused.</summary>
+<img src='./docs/gifs/.gif' alt="TODO" style="max-width:700;  height:auto;">
+
+</details>
+</details vscopt>
+
 
 # Running Code
 
-Before running code we must activate the robot (see previous section)!
+> Before running code we must [activate the robot](#activating-robot)!
 
-There are a few demo programs included in `src/`. You should add your scripts here as well. Let's try and run the teleop example. If we open it in the editor we can click the small "Play" button at the top right. If our venv is created correctly and we have installed all the dependencies a PyGame window should appear. Arrow keys will move the robot. The PGUP/PGDOWN keys will open/close the gripper. The keys b/n/m will cycle the arm through the DOWN/STOW/HOLD positions.
+There are a few demo programs included in `src/`. You should add your scripts here as well. Let's try and run the teleop example. If we open it in the editor we can click the small "Play" button at the top right. If our venv is created correctly and we have installed all the dependencies a PyGame window should appear. Arrow keys will move the robot. The `PGUP/PGDOWN` keys will open/close the gripper. The keys `b/n/m` will cycle the arm through the DOWN/STOW/HOLD positions.
 
-You may also run the script from the gitbash shell with
+You may also run the script from the shell with:
+```bash
+python3.12 src/demo_teleop.py
+```
+<details>
+<summary>windows</summary>
 
 ```bash
-.venv/Scripts/python.exe c:/Users/n/test_mobile_robotics_template/src/demo_teleop.py
+.venv/Scripts/python.exe src/demo_teleop.py
 ```
+</details>
 
-![clone_and_ls](./docs/gifs/start_teleop.gif)
+<details open>
+    <summary>See the following gif for details if you are confused.</summary>
+<img src='./docs/gifs/start_teleop.gif' alt="TODO" style="max-width:700;  height:auto;">
 
 To cycle through shell history the UP/DOWN arrow keys can be used.
 
@@ -288,9 +437,12 @@ To change between a simulated and real robot modify the "mode" string to be "rea
     # bot.init(drawing=True, smartbot_num=3)
 ```
 
-![clone_and_ls](.docs/gifs/smartbot_real_run.gif)
+<details>
+    <summary>See the following gif for details if you are confused.</summary>
+<img src='docs/gifs/smartbot_real_run.gif' alt="TODO" style="max-width:700;  height:auto;">
+</details>
 
-# Guidance on Using `smartbot_irl`
+# Using `smartbot_irl`
 
 The main classes in the `smartbot_irl` package are `SensorData`, `Command`, and
 `SmartBot`. In the example scripts we create an instance `bot` from the
@@ -299,6 +451,7 @@ functions)_ `SmartBot.read()`, `SmartBot.write()`, and `SmartBot.spin()`. For
 the `bot` instance of `SmartBot` you will call these functions like so:
 
 ```py
+def step()
 bot=SmartBot()
 # The following would go in the step() function.
 my_sensor_data = bot.read()
@@ -311,14 +464,114 @@ my_command = Command(
 bot.write(my_command)
 ```
 
+## The step() Function
+This is where all your code should go. The `step()` function is called repeatedly until shutdown by the `main()` function. The `step()` function has a number of parameters passed in when it is called.
 
+## Example Program
+You can have your code mirror the following structure:
 
-# Box2D Local Sim
+```py
+```
 
-This uses the gymnasium+Box2D packages to visualize, and, optionally simulate a
-2D world with the smartbot. The 2D simulator implements a simple kinematic model
-of the robot and a simple grasping model for the hexes. The command and sensor
-data types are identical between simulation and the real SmartBot.
+## Sending Commands
+To send commands we use `SmartBot.write()`
+
+**Note**: We *do not* actually call `write()` like `SmartBot.write()`. Instead what this is communicating is the full name of the `write()` function which is a method of the `SmartBot` class. What this means is that we can call `write()` on any object which is of the *type* `SmartBot`. To illustrate:
+```py
+# `bot` is an object of type `SmartBot`.
+bot = SmartBot(mode="real", drawing=True, smartbot_num=8)
+# `bot` inherits the functions(methods) of its type (i.e. SmartBot).
+bot.init(host="192.168.33.8", port=9090, yaml_path="default_conf.yml")
+bot.write()
+```
+
+It is conceivable that you could make multiple `SmartBot` type objects to control multiple robots simultaneously. If you try this you get a gold sticker.
+```py
+# `bot` is an object of type `SmartBot`.
+bot2 = SmartBot(mode="real", drawing=True, smartbot_num=2)
+bot3 = SmartBot(mode="real", drawing=True, smartbot_num=3)
+# `bot` inherits the functions(methods) of its type (i.e. SmartBot).
+bot2.init(host="192.168.33.2", port=9090, yaml_path="default_conf.yml")
+bot3.init(host="192.168.33.3", port=9090, yaml_path="default_conf.yml")
+```
+
+## Reading Sensor Data
+To read sensor data we use `SmartBot.read()`. This is called in a similar way to `SmartBot.cmd()` but it accepts no arguments. It returns an object of type `smartbot_irl.data.SensorData`
+
+```py
+    sensors = bot.read()
+
+```
+
+## Using Parameters
+The example scripts provides a class called `Params` where you can define parameters and their values. This is useful for values that don't change (e.g. dimensions or PID terms). This simplifies accessing parameter values so that it may be done as follows:
+
+```py
+def step(bot: SmartBotType, params: Params, states: State) -> None:
+    t = time()
+
+    state_prev = states.last # Get previous steps state vector.
+    t_prev = state_prev.t_epoch # The previous steps timestamp.
+
+    # New row vector to append to our states matrix.
+    state_now = {
+        "t_epoch": t,  # Seconds since Jan 1 1970.
+        "t_delta": t - t_prev,  # Seconds since last time step.
+        "t_elapsed": t - params.t0,  # Seconds since program start.
+    }
+    if state_now.t_elapsed > params.time_per_side:
+        # do something
+        ...
+```
+
+## Using State Data
+The `States` object acts like a giant matrix. Columns are for specific variables and rows are time indices (integer count).
+
+```py
+def step(bot: SmartBotType, params: Params, states: State) -> None:
+    t = time()
+
+    state_prev = states.last # Get previous steps state vector.
+    t_prev = state_prev.t_epoch # The previous steps timestamp.
+
+    # New row vector to append to our states matrix.
+    state_now = {
+        "t_epoch": t,  # Seconds since Jan 1 1970.
+        "t_delta": t - t_prev,  # Seconds since last time step.
+        "t_elapsed": t - params.t0,  # Seconds since program start.
+    }
+
+    sensors = bot.read()
+
+    # Let's add the sum of the IMU acceleration data as a new column.
+    imu_sum = sensors.imu.ax + sensors.imu.ay + sensors.imu.az
+    state_now['my_column'] = imu_sum
+
+    # And add to the end of our state matrix.
+    states.append_row(state_now)
+
+```
+
+## Using SmartLogger to Print
+A good alternative to using `print()` is the `SmartLogger` class (which wraps pythons logging package). This allows us to rate limit print messages and to set individual message severity levels.
+
+The logging level can be changed (DEBUG|INFO|WARN|ERROR|CRITICAL) to control the verbosity of output. This can be used so that you do not have to comment out print statements. Rather, you can leave `logger.debug(<your_msg>)` in place and instead change the log level like `logger.setLevel(logging.WARN)` in `main()` to show only WARN and above log messages.
+
+Some example logging commands:
+
+```py
+logger.info(sensors.odom, rate=3)
+logger.info(sensors.odom.x, rate=3)
+logger.info(sensors.odom.y, rate=3)
+logger.info(msg=state_now["joints_positions"])
+logger.debug(msg=f"Number of hexes: {my_var=}", rate=1)
+```
+
+## Saving Data
+
+## Plotting
+
+## Autoformat
 
 # Troubleshooting
 
@@ -346,6 +599,8 @@ git submodule update --checkout --recursive -f
 Check the E-Stop button is off (meaning the lidar+motors have power)! When the
 E-stop is activated power is cut to the robot motors and lidar but the computer
 will still receive power (if the toggle switch is on).
+
+Another common problem is low voltage causing the lidar to stop spinning. Check if you can hear the lidar and if the battery is low.
 
 ## Updating The Template Repo
 
