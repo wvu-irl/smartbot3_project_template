@@ -146,11 +146,11 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     sensors = bot.read()
 
     # Get range directly ahead.
-    range_forward = get_range_forward(sensors.scan)
-    logger.info(msg=f'{range_forward=}', rate=1)
+    # range_forward = get_range_forward(sensors.scan)
+    # logger.info(msg=f'{range_forward=}', rate=1)
 
-    # Add column named `range_forward` if it does not already exist
-    state_now['range_forward'] = range_forward
+    # # Add column named `range_forward` if it does not already exist
+    # state_now['range_forward'] = range_forward
 
     # Do stuff with IMU data.
     logger.debug(sensors.imu)
@@ -185,12 +185,12 @@ def main(log_file='smartlog') -> None:
     """
 
     # Connect to a real robot.
-    # bot = SmartBot(mode="real", drawing=True, smartbot_num=8)
-    # bot.init(host="192.168.33.8", port=9090, yaml_path="default_conf.yml")
+    bot = SmartBot(mode='real', drawing=True, smartbot_num=7)
+    bot.init(host='192.168.33.7', port=9090, yaml_path='default_conf.yml')
 
     # Connect to a sim robot.
-    bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
-    bot.init(drawing=True, smartbot_num=3)
+    # bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
+    # bot.init(drawing=True, smartbot_num=3)
 
     # Create empty parameter and state objects.
     states = State()  # This gets saved to a CSV.
