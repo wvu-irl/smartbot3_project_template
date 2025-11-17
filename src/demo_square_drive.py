@@ -11,7 +11,7 @@ from math import pi
 from smartbot_irl.robot import SmartBotType
 from smartbot_irl import Command, SensorData, SmartBot
 from smartbot_irl.drawing import PlotManager, FigureWrapper
-from smartbot_irl.data import LaserScan, Frame, State, timestamp
+from smartbot_irl.data import LaserScan, State, timestamp
 from teleop import get_key_command
 from smartbot_irl.utils import SmartLogger, check_realtime
 
@@ -44,11 +44,11 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     t_elapsed = t - state_prev.t_prev
 
     state_now = {
-        "t_epoch": t,
-        "time": t - params.t0,
-        "t_prev": state_prev.t_prev,
-        "t_elapsed": t_elapsed,
-        "turning": state_prev.turning,
+        't_epoch': t,
+        'time': t - params.t0,
+        't_prev': state_prev.t_prev,
+        't_elapsed': t_elapsed,
+        'turning': state_prev.turning,
     }
 
     # Create an empty Command type object to be populated and then sent to the robot.
@@ -60,19 +60,19 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
         cmd.angular_vel = 0.0
 
         if t_elapsed * params.speed >= params.side_length:
-            state_now["turning"] = True
-            state_now["t_prev"] = t
+            state_now['turning'] = True
+            state_now['t_prev'] = t
     else:
         cmd.linear_vel = 0.0
         cmd.angular_vel = params.turn_speed
 
         if t_elapsed * params.turn_speed >= pi / 2:
-            state_now["turning"] = False
-            state_now["t_prev"] = t
+            state_now['turning'] = False
+            state_now['t_prev'] = t
     logger.info(sensors.odom)
-    state_now["x"] = sensors.odom.x
-    state_now["y"] = sensors.odom.y
-    state_now["my_val"] = sensors.odom.yaw
+    state_now['x'] = sensors.odom.x
+    state_now['y'] = sensors.odom.y
+    state_now['my_val'] = sensors.odom.yaw
 
     # Save the current states data vector to the states dataframe.
     states.append_row(rowdict=state_now)
@@ -84,7 +84,7 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     bot.write(cmd)
 
 
-def main(log_file="smartlog") -> None:
+def main(log_file='smartlog') -> None:
     """Set up logger, smartbot connection, plotting, and data recording. Then
     run our control loop :meth:`step` forever until stopped (e.g. <Ctrl-c>)."""
 
@@ -96,7 +96,7 @@ def main(log_file="smartlog") -> None:
     # bot.init(host="192.168.33.3", port=9090, yaml_path="default_conf.yml")
 
     # Connect to a sim robot.
-    bot = SmartBot(mode="sim", drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
+    bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
     bot.init(drawing=True, smartbot_num=3)
 
     # Create empty parameter and state objects.
@@ -115,14 +115,14 @@ def main(log_file="smartlog") -> None:
 
     except KeyboardInterrupt:
         # Save data to a CSV file and cleanup ros+matplotlib objects.
-        logger.info("Shutting down...")
+        logger.info('Shutting down...')
 
-        log_filename = f"{log_file}_{timestamp()}.csv"
+        log_filename = f'{log_file}_{timestamp()}.csv'
         states.to_csv(log_filename)
 
-        logger.info(f"Done saving to {log_filename}")
+        logger.info(f'Done saving to {log_filename}')
         bot.shutdown()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

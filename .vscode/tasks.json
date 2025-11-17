@@ -33,6 +33,8 @@
       "linux": {
         "command": "/usr/bin/bash",
         "args": [
+          "--noprofile",
+          "--norc",
           "${workspaceFolder}/.scripts/start_robot.bash",
           "${input:RobotIP}",
           "${input:RobotMode}"
@@ -41,11 +43,19 @@
       "problemMatcher": []
     },
     {
-      "label": "Setup Python Environment",
+      "label": "Stop Robot",
       "type": "shell",
-      // Windows
       "windows": {
-        "command": "python -m venv .venv; .venv\\Scripts\\python.exe -m pip install --upgrade pip; .venv\\Scripts\\pip.exe install -r requirements.txt; .venv\\Scripts\\pip.exe install -e smartbot_irl",
+        "command": "powershell.exe",
+        "args": [
+          "-NoLogo",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\.scripts\\stop_robot_windows.ps1",
+          "${input:RobotIP}",
+        ],
         "options": {
           "shell": {
             "executable": "powershell.exe",
@@ -60,7 +70,37 @@
         }
       },
       "linux": {
-        "command": "python3 -m venv .venv && source .venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt && pip install -e ./smartbot_irl/"
+        "command": "/usr/bin/bash",
+        "args": [
+          "--noprofile",
+          "--norc",
+          "${workspaceFolder}/.scripts/stop_robot.bash",
+          "${input:RobotIP}",
+        ]
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Setup Python Environment",
+      "type": "shell",
+      // Windows
+      "windows": {
+        "command": "python3.12 -m venv .venv; .venv\\Scripts\\python.exe -m pip install --upgrade pip; .venv\\Scripts\\pip.exe install -e smartbot_irl",
+        "options": {
+          "shell": {
+            "executable": "powershell.exe",
+            "args": [
+              "-NoLogo",
+              "-NoProfile",
+              "-ExecutionPolicy",
+              "Bypass",
+              "-Command"
+            ]
+          }
+        }
+      },
+      "linux": {
+        "command": "python3.12 -m venv .venv && source .venv/bin/activate && pip install --upgrade pip  && pip install -e ./smartbot_irl/"
       },
       "problemMatcher": []
     },
