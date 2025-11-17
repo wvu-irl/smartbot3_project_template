@@ -1,4 +1,5 @@
 # https://docs.astral.sh/ruff/editors/settings/#configuration
+
 exclude = [
     "install",
     "log",
@@ -31,14 +32,29 @@ exclude = [
     "venv",
     "build/**",
     "install/**",
-    "/opt/ros/**"
+    "/opt/ros/**",
 ]
 
 
-ignore = []
-
 line-length = 99
 
+[lint]
 # If you want to use additional rules or set other configurations, you can add them here:
 #select = ["E", "W", "F", "D"]  # Add docstring checking.
-select = ["E", "W", "F"] 
+select = ["E", "W", "F"]
+
+# Avoid enforcing line-length violations (`E501`)
+ignore = ["E501"]
+
+extend-select = ["FA"]  # FutureAnnotations rule
+
+[format]
+# Like Black, use double quotes for strings.
+quote-style = "single"
+indent-style = "space"
+line-ending = "auto"
+docstring-code-format = true
+
+
+# suggest adding __forward__
+# [tool.ruff.lint]

@@ -16,7 +16,7 @@
     "**/__pycache__": true,
     "**/*.egg*": true
   },
-
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
   "terminal.integrated.defaultProfile.windows": "Git Bash",
   // "terminal.integrated.defaultProfile.windows": "PowerShell",
   // "terminal.integrated.profiles.windows": {
@@ -25,7 +25,6 @@
   //         "icon": "terminal-powershell"
   //     }
   // },
-
   //   "terminal.integrated.defaultProfile.windows": "Git Bash",
   "workbench.startupEditor": "none",
   "explorer.confirmDelete": false,
@@ -40,7 +39,10 @@
     "diffEditor.ignoreTrimWhitespace": false,
     "editor.defaultColorDecorators": "auto",
     "editor.formatOnType": true,
-    "editor.wordBasedSuggestions": "off"
+    "editor.wordBasedSuggestions": "off",
+    "python.analysis.exclude": [
+      "smartbot_irl/docs"
+    ]
   },
   "python.experiments.enabled": false,
   "python.languageServer": "None",
@@ -56,8 +58,10 @@
     "reportMissingParameterType": false,
     "reportUnknownMemberType": false
   },
-  "basedpyright.analysis.include": ["."],
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "basedpyright.analysis.include": [
+    "."
+  ],
+  // "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
   "python.envFile": "${workspaceFolder}/.env",
   "python.terminal.activateEnvironment": true,
   "basedpyright.analysis.extraPaths": [
@@ -99,7 +103,9 @@
   "clang-format.assumeFilename": ".vscode/clang-format",
   "clang-format.fallbackStyle": "Google",
   "clangd.enableCodeCompletion": true,
-  "clangd.arguments": ["--enable-config"],
+  "clangd.arguments": [
+    "--enable-config"
+  ],
   "editor.stickyScroll.enabled": true,
   "editor.stickyScroll.scrollWithEditor": true,
   "terminal.integrated.stickyScroll.enabled": false,
