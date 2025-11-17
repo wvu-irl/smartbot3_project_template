@@ -144,6 +144,7 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
 
     # Get sensor data.
     sensors = bot.read()
+    sensors.imu
 
     # Get range directly ahead.
     # range_forward = get_range_forward(sensors.scan)
