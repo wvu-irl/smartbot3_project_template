@@ -4,10 +4,10 @@ from math import pi
 from time import sleep, time
 
 from smartbot_irl.data import LaserScan, State, list_sensor_columns, timestamp
-from smartbot_irl.drawing import PlotManager
 from smartbot_irl.utils import SmartLogger, check_realtime, logging
 
 from smartbot_irl import SmartBot, SmartBotType
+from student_plotting import setup_plotting
 from teleop import get_key_command
 
 logger = SmartLogger(level=logging.INFO)  # Print statements, but better!
@@ -21,198 +21,6 @@ class Params:
     speed: float = 1.0
     turn_speed: float = 0.8
     t0: float = 0.0
-
-
-def get_range_forward(scan: LaserScan) -> float:
-    """
-    Find range directly forward. Scan starts at -2piRAD -> ranges[0].
-
-    forward_range = (0RAD - 2piRAD) / angle_per_incremenFor coordinate
-    conventions see REP 103 and REP 105:
-    https://www.ros.org/reps/rep-0105.html
-    https://www.ros.org/reps/rep-0103.html
-    )
-    """
-    forward_index = int((0 * pi - scan.angle_min) / scan.angle_increment)
-    forward_range = scan.ranges[forward_index]
-    logger.debug(msg=f'{forward_range=}', rate=1)
-    return forward_range
-
-
-def step(bot: SmartBotType, params: Params, states: State) -> None:
-    """This is the main control loop for the robot. Code here should run in <50ms."""
-    t = time()
-
-    # Get previous steps state vector.
-    state_prev = states.last
-
-    # The previous steps timestamp.
-    t_prev = state_prev.t_epoch
-
-    # New row vector to append to our states matrix.
-    state_now = {
-        "t_epoch": t,  # Seconds since Jan 1 1970.
-        "t_delta": t - t_prev,  # Seconds since last time step.
-        "t_elapsed": t - params.t0,  # Seconds since program start.
-    }
-
-    # Get sensor data.
-    sensors = bot.read()
-
-    # Print out sensor data.
-    logger.info(sensors.odom, rate=3)
-    logger.info(sensors.odom.x, rate=3)
-    logger.info(sensors.odom.y, rate=3)
-    logger.info(sensors.odom.yaw, rate=3)
-
-    # logger.info(sensors.imu, rate=3)
-    # logger.info(sensors.aruco_poses, rate=3)
-    # logger.info(sensors.manipulator_curr_preset, rate=3)
-    # logger.info(sensors.gripper_curr_state, rate=3)
-    # logger.info(sensors.joints, rate=3)
-
-
-    # Look at the +X lidar range.
-    if sensors.scan is not None:
-        range_forward = get_range_forward(sensors.scan)
-        logger.info(f"{range_forward=}", rate=5)
-
-    # Print *every* populated sensor data attribute.
-    # for name, data in vars(sensors).items():
-    #     if data is not None:
-    #         logger.info(f"{name}: {data}\n", rate=5)
-    # Get range directly ahead.
-    # range_forward = get_range_forward(sensors.scan)
-    # logger.info(msg=f"{range_forward=}", rate=1)
-
-    # Add a new state column named 'range_forward' if it does not already exist
-    # and and insert a value.
-    # state_now.update({"range_forward": range_forward})
-
-    ax = sensors.imu.ax
-    ay = sensors.imu.ay
-    wz = sensors.imu.wz
-
-    ax = sensors.imu.ax
-    state_now["ax"] = ax
-    logger.debug(sensors.imu)
-
-    cmd = get_key_command(sensors)
-    bot.write(cmd)
-
-    # Insert our state vector and *all* sensor data for the current timestep into the state matrix.
-    state_now.update(sensors.flatten())
-    states.append_row(state_now)
-    logger.info(msg=state_now["joints_positions"])
-
-    logger.warn(sensors.seen_hexes)
-
-
-def main(log_file="smartlog") -> None:
-    """Set up logger, smartbot connection, plotting, and data recording. Then
-    run our control loop :meth:`step` forever until stopped (e.g. <Ctrl-c>)."""
-
-    # See more or less information (DEBUG, INFO, WARN, ERROR).
-    logger.setLevel(logging.WARN)
-
-    # Connect to a real robot.
-    bot = SmartBot(mode="real", drawing=True, smartbot_num=8)
-    bot.init(host="192.168.33.8", port=9090, yaml_path="default_conf.yml")
-
-    # Connect to a sim robot.
-    # bot = SmartBot(mode="sim", drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
-    # bot.init(drawing=True, smartbot_num=3)
-
-    # Create empty parameter and state objects.
-    states = State()
-    params = Params()
-    params.t0 = time()  # Start time for this run (sec)
-
-    # Set up plotting.
-    pm = PlotManager()
-
-    odom_fig = pm.add_figure(title='Odometry Data')
-    imu_fig = pm.add_figure(title='IMU Data')
-    joint_fig = pm.add_figure(title='Joints')
-
-    # Add line/scatter plots using columns of the `states` object.
-    odom_fig.add_line(
-        x_col='t_elapsed',
-        y_col=['odom_x', 'odom_y', 'odom_z'],
-        title='X Position',
-        labels='odomx',
-        marker='',
-        aspect='equal',
-        ls='-',
-        xlabel='Time (sec)',
-        ylabel='Pos (m)',
-        # box_aspect=1,
-    )
-    odom_fig.add_scatter(
-        x_col='odom_x',
-        y_col='odom_y',
-        title='X-Y Position',
-        marker='o',
-        aspect='equal',
-        xlabel='X (m)',
-        ylabel='Y (m)',
-    )
-    # Roll, pitch, yaw
-    odom_fig.add_line(
-        x_col='t_elapsed',
-        y_col=['odom_roll', 'odom_pitch', 'odom_yaw'],
-        title='Odom: Roll, Pitch, Yaw',
-        labels=['odom_roll', 'odom_pitch', 'odom_yaw'],
-        marker='o',
-        # aspect="equal",
-        xlabel='X (m)',
-        ylabel='Y (m)',
-    )
-
-    imu_fig.add_line(
-        x_col='t_elapsed',
-        y_col=['imu_ax', 'imu_ay', 'imu_az'],
-        title='Linear Acceleration',
-        labels=['Ax', 'Ay', 'Az'],
-        marker='',
-        # aspect="equal",
-        window=10,
-        xlabel='Time (sec)',
-        ylabel='m/s^2',
-    )
-
-    imu_fig.add_line(
-        x_col='t_elapsed',
-        y_col=['imu_wx', 'imu_wx', 'imu_wz'],
-        title='Angular Velocity',
-        marker='',
-        # aspect="equal",
-        xlabel='Time (sec)',
-        window=100,
-        ylabel='RAD/s',
-    )
-    # joint_fig.add_line(
-    #     x_col="t_elapsed",
-    #     y_col=["range_forward"],
-    #     title="Range Forward",
-    #     # labels=["Positions", "Velocities"],
-    #     marker="",
-    #     # aspect="equal",
-    #     xlabel="Time (sec)",
-    #     ylabel="m",
-    # )
-    joint_fig.add_line(
-        x_col='t_elapsed',
-        y_col=['joints_positions'],
-        title='Joints',
-        # labels=["Positions", "Velocities"],
-        marker='',
-        # aspect="equal",
-        xlabel='Time (sec)',
-        ylabel='RAD/s',
-    )
-
-    return pm
 
 
 def step(bot: SmartBotType, params: Params, states: State) -> None:
@@ -233,13 +41,6 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     # Get sensor data.
     sensors = bot.read()
     sensors.imu
-
-    # Get range directly ahead.
-    # range_forward = get_range_forward(sensors.scan)
-    # logger.info(msg=f'{range_forward=}', rate=1)
-
-    # # Add column named `range_forward` if it does not already exist
-    # state_now['range_forward'] = range_forward
 
     # Do stuff with IMU data.
     logger.debug(sensors.imu)
@@ -274,12 +75,12 @@ def main(log_file='smartlog') -> None:
     """
 
     # Connect to a real robot.
-    bot = SmartBot(mode='real', drawing=True, smartbot_num=7)
-    bot.init(host='192.168.33.7', port=9090, yaml_path='default_conf.yml')
+    # bot = SmartBot(mode='real', drawing=True, smartbot_num=7)
+    # bot.init(host='192.168.33.7', port=9090, yaml_path='default_conf.yml')
 
     # Connect to a sim robot.
-    # bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
-    # bot.init(drawing=True, smartbot_num=3)
+    bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
+    bot.init(drawing=True, smartbot_num=3)
 
     # Create empty parameter and state objects.
     states = State()  # This gets saved to a CSV.
@@ -290,7 +91,7 @@ def main(log_file='smartlog') -> None:
     plot_manager = setup_plotting()
     plot_manager.show_plots()
 
-    # Print out what columns exist (There may be more later!)
+    # Print out what columns exist (There may be more added later!)
     logger.info(msg=f'State Columns: {list_sensor_columns()}')
 
     # Run the robot!
@@ -303,7 +104,6 @@ def main(log_file='smartlog') -> None:
 
             # Send last row of data to plots.
             plot_manager.update_all(states.iloc[-1])
-            # sleep(0.001)
 
     except KeyboardInterrupt:
         logger.info('User requesting shut down...')
@@ -314,6 +114,7 @@ def main(log_file='smartlog') -> None:
         logger.info(f'Done saving to {log_filename}')
 
         bot.shutdown()
+
 
 if __name__ == '__main__':
     main()
