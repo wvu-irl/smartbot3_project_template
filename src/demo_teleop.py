@@ -51,9 +51,9 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
 
     # New row vector to append to our states matrix.
     state_now = {
-        "t_epoch": t,  # Seconds since Jan 1 1970.
-        "t_delta": t - t_prev,  # Seconds since last time step.
-        "t_elapsed": t - params.t0,  # Seconds since program start.
+        't_epoch': t,  # Seconds since Jan 1 1970.
+        't_delta': t - t_prev,  # Seconds since last time step.
+        't_elapsed': t - params.t0,  # Seconds since program start.
     }
 
     # Get sensor data.
@@ -71,11 +71,10 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     # logger.info(sensors.gripper_curr_state, rate=3)
     # logger.info(sensors.joints, rate=3)
 
-
     # Look at the +X lidar range.
     if sensors.scan is not None:
         range_forward = get_range_forward(sensors.scan)
-        logger.info(f"{range_forward=}", rate=5)
+        logger.info(f'{range_forward=}', rate=5)
 
     # Print *every* populated sensor data attribute.
     # for name, data in vars(sensors).items():
@@ -94,7 +93,7 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     wz = sensors.imu.wz
 
     ax = sensors.imu.ax
-    state_now["ax"] = ax
+    state_now['ax'] = ax
     logger.debug(sensors.imu)
 
     cmd = get_key_command(sensors)
@@ -103,12 +102,13 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     # Insert our state vector and *all* sensor data for the current timestep into the state matrix.
     state_now.update(sensors.flatten())
     states.append_row(state_now)
-    logger.info(msg=state_now["joints_positions"])
+
+    logger.info(msg=state_now['joints_positions'])
 
     logger.warn(sensors.seen_hexes)
 
 
-def main(log_file="smartlog") -> None:
+def main(log_file='smartlog') -> None:
     """Set up logger, smartbot connection, plotting, and data recording. Then
     run our control loop :meth:`step` forever until stopped (e.g. <Ctrl-c>)."""
 
@@ -116,8 +116,8 @@ def main(log_file="smartlog") -> None:
     logger.setLevel(logging.WARN)
 
     # Connect to a real robot.
-    bot = SmartBot(mode="real", drawing=True, smartbot_num=8)
-    bot.init(host="192.168.33.8", port=9090, yaml_path="default_conf.yml")
+    bot = SmartBot(mode='real', drawing=True, smartbot_num=8)
+    bot.init(host='192.168.33.8', port=9090, yaml_path='default_conf.yml')
 
     # Connect to a sim robot.
     # bot = SmartBot(mode="sim", drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
@@ -314,6 +314,7 @@ def main(log_file='smartlog') -> None:
         logger.info(f'Done saving to {log_filename}')
 
         bot.shutdown()
+
 
 if __name__ == '__main__':
     main()
