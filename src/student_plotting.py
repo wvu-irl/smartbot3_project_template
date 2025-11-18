@@ -1,4 +1,5 @@
-from smartbot_irl.drawing._plotting import PlotManager
+import pickle
+from smartbot_irl.drawing import PlotManager
 
 
 def setup_plotting() -> PlotManager:
@@ -11,9 +12,12 @@ def setup_plotting() -> PlotManager:
     """
     pm = PlotManager()
 
+    # picklestring = pickle.dumps(pm)
+    # print(picklestring)
+
     # Create two windows.
     odom_fig = pm.add_figure(title='Odometry Data')
-    imu_fig = pm.add_figure(title='IMU Data')
+    # imu_fig = pm.add_figure(title='IMU Data')
 
     # Add line/scatter plots using columns of the `states` object.
     odom_fig.add_line(
@@ -38,26 +42,26 @@ def setup_plotting() -> PlotManager:
         ylabel='Y (m)',
     )
 
-    imu_fig.add_line(
-        x_col='t_elapsed',
-        y_col=['imu_ax', 'imu_ay', 'imu_az'],
-        title='Linear Acceleration',
-        labels=['Ax', 'Ay', 'Az'],
-        marker='',
-        # aspect="equal",
-        window=10,
-        xlabel='Time (sec)',
-        ylabel='m/s^2',
-    )
+    # imu_fig.add_line(
+    #     x_col='t_elapsed',
+    #     y_col=['imu_ax', 'imu_ay', 'imu_az'],
+    #     title='Linear Acceleration',
+    #     labels=['Ax', 'Ay', 'Az'],
+    #     marker='',
+    #     # aspect="equal",
+    #     window=10,
+    #     xlabel='Time (sec)',
+    #     ylabel='m/s^2',
+    # )
 
-    imu_fig.add_line(
-        x_col='t_elapsed',
-        y_col=['imu_wx', 'imu_wx', 'imu_wz'],
-        title='Angular Velocity',
-        marker='',
-        # aspect="equal",
-        xlabel='Time (sec)',
-        window=100,
-        ylabel='RAD/s',
-    )
+    # imu_fig.add_line(
+    #     x_col='t_elapsed',
+    #     y_col=['imu_wx', 'imu_wx', 'imu_wz'],
+    #     title='Angular Velocity',
+    #     marker='',
+    #     # aspect="equal",
+    #     xlabel='Time (sec)',
+    #     window=100,
+    #     ylabel='RAD/s',
+    # )
     return pm

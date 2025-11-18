@@ -8,9 +8,9 @@ from smartbot_irl.utils import SmartLogger, check_realtime, logging
 
 from smartbot_irl import SmartBot, SmartBotType
 from student_plotting import setup_plotting
-from teleop import get_key_command
+from student_teleop import get_key_command
 
-logger = SmartLogger(level=logging.INFO)  # Print statements, but better!
+logger = SmartLogger(level=logging.WARN)  # Print statements, but better!
 
 
 @dataclass
@@ -89,7 +89,7 @@ def main(log_file='smartlog') -> None:
 
     # Set up plotting.
     plot_manager = setup_plotting()
-    plot_manager.show_plots()
+    plot_manager.start_plot_proc()
 
     # Print out what columns exist (There may be more added later!)
     logger.info(msg=f'State Columns: {list_sensor_columns()}')
@@ -103,7 +103,8 @@ def main(log_file='smartlog') -> None:
             bot.spin()  # Get new sensor data.
 
             # Send last row of data to plots.
-            plot_manager.update_all(states.iloc[-1])
+            # plot_manager.update_all(states.iloc[-1])
+            plot_manager.update_queue(states.iloc[-1])
 
     except KeyboardInterrupt:
         logger.info('User requesting shut down...')
@@ -112,6 +113,7 @@ def main(log_file='smartlog') -> None:
         log_filename = f'{log_file}_{timestamp()}.csv'
         states.to_csv(log_filename)
         logger.info(f'Done saving to {log_filename}')
+        plot_manager.stop_plot_proc()
 
         bot.shutdown()
 
