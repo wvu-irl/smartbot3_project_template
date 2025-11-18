@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 from math import pi
 from time import sleep, time
+from typing import Optional
 
 from smartbot_irl import SmartBot, SmartBotType
 from smartbot_irl.data import LaserScan, State, list_sensor_columns, timestamp
@@ -21,6 +22,8 @@ class Params:
     speed: float = 1.0
     turn_speed: float = 0.8
     t0: float = 0.0
+    controller_rate: float = 50.0
+    log_filename: Optional[str] = None
 
 
 def step(bot: SmartBotType, params: Params, states: State) -> None:
@@ -102,14 +105,23 @@ def main(log_file='smartlog') -> None:
 
     # Run the robot!
     #######################################
+    t_prev = time()
     try:
         while True:
+            now = time()
+            dt = now - t_prev
+            t_prev = now
+            bot.spin(dt)  # Get new sensor data.
+
             step(bot, params, states)  # Run our code.
-            check_realtime(start_t=time())  # Check if our step() is taking too long.
-            bot.spin()  # Get new sensor data.
 
             # Send last row of data to plots.
             plot_manager.update_queue(states.iloc[-1])
+
+            t_elapsed = time() - now
+            remaining = (1 / params.controller_rate) - t_elapsed
+            if remaining > 0:
+                sleep(remaining)
 
     except KeyboardInterrupt:
         logger.info('User requesting shut down...')
@@ -119,7 +131,6 @@ def main(log_file='smartlog') -> None:
         states.to_csv(log_filename)
         logger.info(f'Done saving to {log_filename}')
         plot_manager.stop_plot_proc()
-
         bot.shutdown()
 
 

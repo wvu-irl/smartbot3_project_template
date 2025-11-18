@@ -8,8 +8,8 @@ def get_key(bot: SmartBotType) -> Command:
 
     """
 
-    lin_speed = 2
-    ang_speed = 0.8
+    lin_speed = 10
+    ang_speed = 5.8
 
     # Deal with pygame events.
     for event in pygame.event.get():
