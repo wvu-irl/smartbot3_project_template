@@ -8,7 +8,7 @@ from smartbot_irl.data import LaserScan, State, list_sensor_columns, timestamp
 from smartbot_irl.utils import SmartLogger, check_realtime, logging
 
 from student_plotting import setup_plotting
-from student_teleop import get_key_command
+from student_teleop import get_key
 
 logger = SmartLogger(level=logging.WARN)  # Print statements, but better!
 
@@ -33,14 +33,13 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     # Create current state vector.
     t = time()
     state_now = {
-        't_epoch': t,  # Seconds since Jan 1 1970.
+        't_epoch': t,  # Seconds since Jan 1, 1970.
         't_delta': t - t_prev,  # Seconds since last time step.
         't_elapsed': t - params.t0,  # Seconds since program start.
     }
 
     # Get sensor data.
     sensors = bot.read()
-    sensors.imu
 
     # Do stuff with IMU data.
     logger.debug(sensors.imu)
@@ -61,11 +60,10 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     state_now['odom_yaw'] = sensors.odom.yaw
 
     # Get a Command obj using teleop.
-    cmd = get_key_command(sensors)
+    cmd = get_key(bot)
     bot.write(cmd)
 
     # Update our `states` matrix by inserting our `state_now` vector.
-    # state_now.update(sensors.flatten())
     states.append_row(state_now)
     logger.info(f'\nState (t={state_now["t_elapsed"]}): {state_now}')
 
