@@ -30,7 +30,7 @@
   "explorer.confirmDragAndDrop": false,
   "jupyter.askForKernelRestart": false,
   "window.zoomLevel": 1,
-  "editor.minimap.enabled": false,
+  "editor.minimap.enabled": true,
   "notebook.lineNumbers": "on",
   "[python]": {
     // "editor.defaultFormatter": "charliermarsh.ruff",

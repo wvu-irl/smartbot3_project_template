@@ -6,7 +6,7 @@ from typing import Optional
 
 from smartbot_irl import SmartBot, SmartBotType
 from smartbot_irl.data import LaserScan, State, list_sensor_columns, timestamp
-from smartbot_irl.utils import SmartLogger, check_realtime, logging
+from smartbot_irl.utils import SmartLogger, check_realtime, logging, get_log_dir, save_data
 
 from student_plotting import setup_plotting
 from student_teleop import get_key
@@ -71,7 +71,7 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     logger.info(f'\nState (t={state_now["t_elapsed"]}): {state_now}')
 
 
-def main(log_file='smartlog') -> None:
+def main(log_filename='smartlog') -> None:
     """Connect to smartbot, setup plots, save data. Then loop `step()` forever.
 
     Switch between the real and simulated robot here. Don't forget to make sure
@@ -126,10 +126,14 @@ def main(log_file='smartlog') -> None:
     except KeyboardInterrupt:
         logger.info('User requesting shut down...')
     finally:
-        # Save data to a CSV file and cleanup ros+matplotlib objects.
-        log_filename = f'{log_file}_{timestamp()}.csv'
-        states.to_csv(log_filename)
-        logger.info(f'Done saving to {log_filename}')
+        # Save data to a CSV file.
+        log_path = save_data(
+            states,
+            params,
+            log_filename,
+        )
+        logger.info(f'Saved data in {log_path}')
+
         plot_manager.stop_plot_proc()
         bot.shutdown()
 
