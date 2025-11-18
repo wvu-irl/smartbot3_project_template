@@ -3,10 +3,10 @@ from dataclasses import dataclass
 from math import pi
 from time import sleep, time
 
+from smartbot_irl import SmartBot, SmartBotType
 from smartbot_irl.data import LaserScan, State, list_sensor_columns, timestamp
 from smartbot_irl.utils import SmartLogger, check_realtime, logging
 
-from smartbot_irl import SmartBot, SmartBotType
 from student_plotting import setup_plotting
 from student_teleop import get_key_command
 
@@ -46,20 +46,28 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     logger.debug(sensors.imu)
     ax = sensors.imu.ax
     ay = sensors.imu.ay
+    az = sensors.imu.az
     wz = sensors.imu.wz
-    state_now['ax'] = ax
-    state_now['ay'] = ay
-    state_now['wz'] = wz
 
-    # Drive robot using a keyboard.
+    # Add new columns to our state vector.
+    state_now['imu_ax'] = ax
+    state_now['imu_ay'] = ay
+    state_now['imu_az'] = az
+    state_now['imu_wz'] = wz
+
+    # Do stuff odom data.
+    state_now['odom_x'] = sensors.odom.x
+    state_now['odom_y'] = sensors.odom.y
+    state_now['odom_yaw'] = sensors.odom.yaw
+
+    # Get a Command obj using teleop.
     cmd = get_key_command(sensors)
     bot.write(cmd)
 
     # Update our `states` matrix by inserting our `state_now` vector.
-    state_now.update(sensors.flatten())
+    # state_now.update(sensors.flatten())
     states.append_row(state_now)
-
-    logger.info(sensors.seen_hexes)
+    logger.info(f'\nState (t={state_now["t_elapsed"]}): {state_now}')
 
 
 def main(log_file='smartlog') -> None:
@@ -103,7 +111,6 @@ def main(log_file='smartlog') -> None:
             bot.spin()  # Get new sensor data.
 
             # Send last row of data to plots.
-            # plot_manager.update_all(states.iloc[-1])
             plot_manager.update_queue(states.iloc[-1])
 
     except KeyboardInterrupt:
