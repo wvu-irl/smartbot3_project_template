@@ -1,13 +1,13 @@
 # demo_2dsim.py
-from dataclasses import dataclass
-from math import cos, inf, pi, sin, sqrt
 import math
 import random
+from dataclasses import dataclass
+from math import cos, inf, pi, sin, sqrt
 from time import sleep, time
 from types import SimpleNamespace
-from typing import Optional, TypedDict
+from typing import Optional
 
-from smartbot_irl import Command, sim2d, SmartBot, SmartBotType
+from numpy import deg2rad
 from smartbot_irl.data import (
     IMU,
     ArucoMarkers,
@@ -19,9 +19,10 @@ from smartbot_irl.data import (
     list_sensor_columns,
     timestamp,
 )
-from smartbot_irl.data._type_maps import Odometry
-from smartbot_irl.utils import SmartLogger, check_realtime, logging, get_log_dir, save_data
+from smartbot_irl.data.type_maps import Odometry
+from smartbot_irl.utils import SmartLogger, check_realtime, get_log_dir, logging, save_data
 
+from smartbot_irl import Command, SmartBot, SmartBotType, sim2d
 from student_plotting import setup_plotting
 from student_teleop import get_key
 
@@ -43,23 +44,18 @@ class Params:
     d: float = 0.0
 
 
-"""This tracks the current state. Get's inserted into states matrix each step.
+"""This tracks the current state. Gets inserted into states matrix each step.
 We can add additional entries whenever we please.
 """
 state = SimpleNamespace(
-    t_delta=0.0,
-    t_elapsed=0.0,
-    t_epoch=0.0,
-    x=0.0,
-    y=0.0,
-    mode='searching',  # searching, goto, arrived
-    nearest_hex_id=0,
-    nearest_hex_x=0,
-    nearest_hex_y=0,
-    goal_x=0.0,
-    goal_y=0.0,
-    heading=0.0,
-    target_heading=0.0,
+    t_delta=0.0,  # Time since prev step (sec)
+    t_elapsed=0.0,  # Time since robot start (sec)
+    t_epoch=0.0,  # time since Jan 1, 1970 UTC (sec)
+    mode='searching',  # {searching, goto, arrived}.
+    nearest_hex_id=0,  # Integer ID of a marker.
+    nearest_hex_x=0.0,  # X-axis distance (m, Odom frame).
+    nearest_hex_y=0.0,  # Y-axis distance (m, Odom frame).
+    target_heading=0.0,  # Target position azimuth (RAD).
 )
 
 
@@ -68,35 +64,40 @@ def step(bot: SmartBotType, params: Params, states: States) -> None:
 
     # Get info about previous timestep state.
     state_prev = states.last
-    t_prev = state_prev.t_epoch  # Last timestamp (sec).
+    t_prev = state_prev.t_epoch  # Previous steps timestamp (sec).
 
-    # Create current state vector.
+    # Record some time values to our current state vector.
     t = time()
     state.t_epoch = t
-    state.t_delta = t - t_prev
+    state.t_delta = t - t_prev  # How long between now and prev step (sec).
     state.t_elapsed = t - params.t0
 
     # Get sensor data.
     sensors = bot.read()
 
     # Do stuff with IMU data.
-    logger.debug(sensors.imu)
+    logger.debug(sensors.imu, rate=5)
     state.imu_ax = sensors.imu.ax
     state.imu_ay = sensors.imu.ay
     state.imu_az = sensors.imu.az
     state.imu_wz = sensors.imu.wz
 
-    # # Do stuff with odom data.
+    # Do stuff with odom data.
+    logger.debug(sensors.odom, rate=5)
     state.odom_x = sensors.odom.x
     state.odom_y = sensors.odom.y
     state.odom_yaw = sensors.odom.yaw
 
+    # Create an empty command that we will populate with values.
     cmd = Command()
+
+    # Simple state machine.
     match state.mode:
         case 'searching':
-            logger.info("I'm searching!", rate=1)
+            ###################################################################
+            logger.info("I'm searching!", rate=3)
 
-            # If we see a marker(s) note its pos and change mode.
+            # If we see at least one marker note pos of nearest one and change mode to 'goto'.
             hexes = sensors.seen_hexes
             if len(hexes.poses) > 0:
                 state.nearest_hex_id = 0
@@ -108,6 +109,7 @@ def step(bot: SmartBotType, params: Params, states: States) -> None:
                 for hex_pose, hex_id in zip(hexes.poses, hexes.marker_ids):
                     dx = abs(state.odom_x - hex_pose.x)
                     dy = abs(state.odom_y - hex_pose.y)
+
                     if sqrt(dx**2 + dy**2) < nearest_hex_dist:
                         state.nearest_hex_x = hex_pose.x
                         state.nearest_hex_y = hex_pose.y
@@ -115,17 +117,23 @@ def step(bot: SmartBotType, params: Params, states: States) -> None:
                 state.mode = 'goto'
             else:
                 # Drive around randomly.
-                if random.random() < 0.05:
+                if random.random() < 0.05:  # 5% chance to choose a new heading.
                     state.target_heading = random.uniform(-math.pi, math.pi)
-                cmd.linear_vel = params.speed
+
                 ang_error = state.target_heading - state.odom_yaw
                 ang_error = math.atan2(sin(ang_error), cos(ang_error))
 
-                logger.info(f'{ang_error}')
                 cmd.angular_vel = params.p * params.turn_speed * ang_error
+                if abs(ang_error > deg2rad(35)):
+                    cmd.linear_vel = 0.0
+                else:
+                    cmd.linear_vel = params.speed  # Drive constant linear vel
+
+                logger.info(f'{cmd=}', rate=3)
 
         case 'goto':
-            logger.info('Heading towards a hex!', rate=1)
+            ###################################################################
+            logger.info('Heading towards a hex!', rate=3)
             hexes = sensors.seen_hexes
 
             # Try to refind the same marker each step
@@ -156,7 +164,7 @@ def step(bot: SmartBotType, params: Params, states: States) -> None:
             gx, gy = state.nearest_hex_x, state.nearest_hex_y
             dist = sqrt(gx**2 + gy**2)
 
-            # Arrival check
+            # Arrival checkg
             if dist < 0.1:
                 state.mode = 'arrived'
                 bot.write(Command())  # stop
@@ -170,6 +178,7 @@ def step(bot: SmartBotType, params: Params, states: States) -> None:
                 cmd.linear_vel = 0.0
 
         case 'arrived':
+            ###################################################################
             logger.info('Arrived at a hex!', rate=1)
             state.mode = 'searching'
 
@@ -178,7 +187,7 @@ def step(bot: SmartBotType, params: Params, states: States) -> None:
 
     # Update our `states` matrix by inserting our `state` vector.
     states.append_row(rowdict=state.__dict__)
-    logger.info(f'\nState (t={state.t_elapsed}): {state}', rate=5)
+    logger.info(state, rate=5)
 
 
 def main(log_filename='smartlog') -> None:
