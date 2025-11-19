@@ -4,14 +4,14 @@ from math import pi
 from time import sleep, time
 from typing import Optional
 
-from smartbot_irl import SmartBot, SmartBotType
-from smartbot_irl.data import LaserScan, State, list_sensor_columns, timestamp
+from smartbot_irl import sim2d, SmartBot, SmartBotType
+from smartbot_irl.data import LaserScan, States, list_sensor_columns, timestamp
 from smartbot_irl.utils import SmartLogger, check_realtime, logging, get_log_dir, save_data
 
 from student_plotting import setup_plotting
 from student_teleop import get_key
 
-logger = SmartLogger(level=logging.WARN)  # Print statements, but better!
+logger = SmartLogger(level=logging.INFO)  # Print statements, but better!
 
 
 @dataclass
@@ -26,7 +26,7 @@ class Params:
     log_filename: Optional[str] = None
 
 
-def step(bot: SmartBotType, params: Params, states: State) -> None:
+def step(bot: SmartBotType, params: Params, states: States) -> None:
     """This is the main control loop for the robot. Code here should run in <50ms."""
 
     # Get info about previous timestep state.
@@ -62,13 +62,16 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     state_now['odom_y'] = sensors.odom.y
     state_now['odom_yaw'] = sensors.odom.yaw
 
+    for each in sensors.seen_hexes.poses:
+        print(each)
+
     # Get a Command obj using teleop.
     cmd = get_key(bot)
     bot.write(cmd)
 
     # Update our `states` matrix by inserting our `state_now` vector.
     states.append_row(state_now)
-    logger.info(f'\nState (t={state_now["t_elapsed"]}): {state_now}')
+    # logger.info(f'\nState (t={state_now["t_elapsed"]}): {state_now}')
 
 
 def main(log_filename='smartlog') -> None:
@@ -91,8 +94,12 @@ def main(log_filename='smartlog') -> None:
     bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
     bot.init(drawing=True, smartbot_num=3)
 
+    # Place 8 hexes randomly inside the arena.
+    for i in range(8):
+        bot.engine.place_hex()
+
     # Create empty parameter and state objects.
-    states = State()  # This gets saved to a CSV.
+    states = States()  # This gets saved to a CSV.
     params = Params()  # We can access this later in step().
     params.t0 = time()  # Record start time for this run (sec).
 
@@ -111,9 +118,10 @@ def main(log_filename='smartlog') -> None:
             now = time()
             dt = now - t_prev
             t_prev = now
+
             bot.spin(dt)  # Get new sensor data.
 
-            step(bot, params, states)  # Run our code.
+            step(bot, params, states)  # <-------------- Run our code.
 
             # Send last row of data to plots.
             plot_manager.update_queue(states.iloc[-1])
@@ -127,13 +135,7 @@ def main(log_filename='smartlog') -> None:
         logger.info('User requesting shut down...')
     finally:
         # Save data to a CSV file.
-        log_path = save_data(
-            states,
-            params,
-            log_filename,
-        )
-        logger.info(f'Saved data in {log_path}')
-
+        save_data(states, params, log_filename)
         plot_manager.stop_plot_proc()
         bot.shutdown()
 
