@@ -11,7 +11,7 @@ from smartbot_irl.utils import SmartLogger, check_realtime, logging, get_log_dir
 from student_plotting import setup_plotting
 from student_teleop import get_key
 
-logger = SmartLogger(level=logging.INFO)  # Print statements, but better!
+logger = SmartLogger(level=logging.DEBUG)  # Print statements, but better!
 
 
 @dataclass
@@ -26,7 +26,7 @@ class Params:
     log_filename: Optional[str] = None
 
 
-def step(bot: SmartBotType, params: Params, states: States) -> None:
+def step(bot: SmartBot, params: Params, states: States) -> None:
     """This is the main control loop for the robot. Code here should run in <50ms."""
 
     # Get info about previous timestep state.
@@ -43,27 +43,31 @@ def step(bot: SmartBotType, params: Params, states: States) -> None:
 
     # Get sensor data.
     sensors = bot.read()
+    if sensors is None:
+        # No data available yet.
+        return
+    logger.info(sensors.odom, rate=3)
 
     # Do stuff with IMU data.
-    logger.debug(sensors.imu)
-    ax = sensors.imu.ax
-    ay = sensors.imu.ay
-    az = sensors.imu.az
-    wz = sensors.imu.wz
+    # logger.debug(sensors.imu)
+    # ax = sensors.imu.ax
+    # ay = sensors.imu.ay
+    # az = sensors.imu.az
+    # wz = sensors.imu.wz
 
-    # Add new columns to our state vector.
-    state_now['imu_ax'] = ax
-    state_now['imu_ay'] = ay
-    state_now['imu_az'] = az
-    state_now['imu_wz'] = wz
+    # # Add new columns to our state vector.
+    # state_now['imu_ax'] = ax
+    # state_now['imu_ay'] = ay
+    # state_now['imu_az'] = az
+    # state_now['imu_wz'] = wz
 
-    # Do stuff odom data.
-    state_now['odom_x'] = sensors.odom.x
-    state_now['odom_y'] = sensors.odom.y
-    state_now['odom_yaw'] = sensors.odom.yaw
+    # # Do stuff odom data.
+    # state_now['odom_x'] = sensors.odom.x
+    # state_now['odom_y'] = sensors.odom.y
+    # state_now['odom_yaw'] = sensors.odom.yaw
 
-    for each in sensors.seen_hexes.poses:
-        print(each)
+    # for each in sensors.seen_hexes.poses:
+    #     print(each)
 
     # Get a Command obj using teleop.
     cmd = get_key(bot)
@@ -91,12 +95,8 @@ def main(log_filename='smartlog') -> None:
     # bot.init(host='192.168.33.7', port=9090, yaml_path='default_conf.yml')
 
     # Connect to a sim robot.
-    bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
-    bot.init(drawing=True, smartbot_num=3)
-
-    # Place 8 hexes randomly inside the arena.
-    for i in range(8):
-        bot.engine.place_hex()
+    bot = SmartBot(mode='sim2d', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
+    # bot.init(drawing=True, smartbot_num=3)
 
     # Create empty parameter and state objects.
     states = States()  # This gets saved to a CSV.
@@ -104,8 +104,8 @@ def main(log_filename='smartlog') -> None:
     params.t0 = time()  # Record start time for this run (sec).
 
     # Set up plotting.
-    plot_manager = setup_plotting()
-    plot_manager.start_plot_proc()
+    # plot_manager = setup_plotting()
+    # plot_manager.start_plot_proc()
 
     # Print out what columns exist (There may be more added later!)
     logger.info(msg=f'State Columns: {list_sensor_columns()}')
@@ -119,12 +119,12 @@ def main(log_filename='smartlog') -> None:
             dt = now - t_prev
             t_prev = now
 
-            bot.spin(dt)  # Get new sensor data.
+            bot.spin()  # Get new sensor data.
 
             step(bot, params, states)  # <-------------- Run our code.
 
             # Send last row of data to plots.
-            plot_manager.update_queue(states.iloc[-1])
+            # plot_manager.update_queue(states.iloc[-1])
 
             t_elapsed = time() - now
             remaining = (1 / params.controller_rate) - t_elapsed
@@ -136,7 +136,7 @@ def main(log_filename='smartlog') -> None:
     finally:
         # Save data to a CSV file.
         save_data(states, params, log_filename)
-        plot_manager.stop_plot_proc()
+        # plot_manager.stop_plot_proc()
         bot.shutdown()
 
 

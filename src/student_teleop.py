@@ -1,8 +1,8 @@
 import pygame
-from smartbot_irl import Command, SmartBotType
+from smartbot_irl import Command, SmartBotType, SmartBot
 
 
-def get_key(bot: SmartBotType) -> Command:
+def get_key(bot: SmartBot) -> Command:
     """
     Create a :class:`smartbot_irl.Command` object based on keyboard/mouse input.
 
