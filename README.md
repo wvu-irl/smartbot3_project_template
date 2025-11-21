@@ -1,4 +1,4 @@
 # Smartbot3
-See [mobilerobotics.wvirl.com](mobilerobotics.wvirl.com) for installation and
+See [mobilerobotics.wvirl.com](https://mobilerobotics.wvirl.com) for installation and
 usage instructions
 
