@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 from math import pi
 from time import sleep, time
+from turtle import xcor
 from typing import Optional
 
 from smartbot_irl import sim2d, SmartBot, SmartBotType
@@ -46,25 +47,25 @@ def step(bot: SmartBot, params: Params, states: States) -> None:
     if sensors is None:
         # No data available yet.
         return
-    logger.info(sensors.scan, rate=3)
+    logger.info(f'{sensors.odom.x} odom xco', rate=3)
 
     # Do stuff with IMU data.
     # logger.debug(sensors.imu)
-    # ax = sensors.imu.ax
-    # ay = sensors.imu.ay
+    ax = sensors.imu.ax
+    ay = sensors.imu.ay
     # az = sensors.imu.az
-    # wz = sensors.imu.wz
+    wz = sensors.imu.wz
 
     # # Add new columns to our state vector.
-    # state_now['imu_ax'] = ax
-    # state_now['imu_ay'] = ay
+    state_now['imu_ax'] = ax
+    state_now['imu_ay'] = ay
     # state_now['imu_az'] = az
-    # state_now['imu_wz'] = wz
+    state_now['imu_wz'] = wz
 
     # # Do stuff odom data.
-    # state_now['odom_x'] = sensors.odom.x
-    # state_now['odom_y'] = sensors.odom.y
-    # state_now['odom_yaw'] = sensors.odom.yaw
+    state_now['odom_x'] = sensors.odom.x
+    state_now['odom_y'] = sensors.odom.y
+    state_now['odom_yaw'] = sensors.odom.yaw
 
     # for each in sensors.seen_hexes.poses:
     #     print(each)
@@ -95,7 +96,7 @@ def main(log_filename='smartlog') -> None:
     # bot.init(host='192.168.33.7', port=9090, yaml_path='default_conf.yml')
 
     # Connect to a sim robot.
-    bot = SmartBot(mode='sim', drawing=True, draw_region=((5, 5), (-5, 5)), smartbot_num=3)
+    bot = SmartBot(mode='sim2d', drawing=True, draw_region=((10, 10), (-10, 10)), smartbot_num=3)
     # bot.init(drawing=True, smartbot_num=3)
 
     # Create empty parameter and state objects.
@@ -104,8 +105,8 @@ def main(log_filename='smartlog') -> None:
     params.t0 = time()  # Record start time for this run (sec).
 
     # Set up plotting.
-    # plot_manager = setup_plotting()
-    # plot_manager.start_plot_proc()
+    plot_manager = setup_plotting()
+    plot_manager.start_plot_proc()
 
     # Print out what columns exist (There may be more added later!)
     logger.info(msg=f'State Columns: {list_sensor_columns()}')
@@ -124,7 +125,7 @@ def main(log_filename='smartlog') -> None:
             step(bot, params, states)  # <-------------- Run our code.
 
             # Send last row of data to plots.
-            # plot_manager.update_queue(states.iloc[-1])
+            plot_manager.update_queue(states.iloc[-1])
 
             t_elapsed = time() - now
             remaining = (1 / params.controller_rate) - t_elapsed

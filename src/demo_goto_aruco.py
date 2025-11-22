@@ -201,7 +201,7 @@ def main(log_filename='smartlog') -> None:
     # bot.init(host='192.168.33.7', port=9090, yaml_path='default_conf.yml')
 
     # Connect to a sim robot.
-    bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
+    bot = SmartBot(mode='sim2d', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
     bot.init(drawing=True, smartbot_num=3)
 
     # Place 8 hexes randomly inside the arena.

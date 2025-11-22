@@ -17,33 +17,33 @@ def setup_plotting() -> PlotManager:
     pm = PlotManager()
 
     # Create two windows.
-    # odom_fig = pm.add_figure(title='Odometry Data')
+    odom_fig = pm.add_figure(title='Odometry Data')
     imu_fig = pm.add_figure(title='IMU Data')
 
     # Plot odom pose data.
-    # odom_fig.add_line(
-    #     x_col='t_elapsed',
-    #     y_col=['odom_x', 'odom_y', 'odom_yaw'],
-    #     title='2D Odom Pose',
-    #     labels=['odomx', 'odom_y', 'odom_yaw'],
-    #     marker='',
-    #     aspect='equal',
-    #     ls='-',
-    #     xlabel='Time (sec)',
-    #     ylabel='Pos (m) and Angle (RAD)',
-    #     window=500,
-    #     # box_aspect=1,
-    # )
-    # odom_fig.add_line(
-    #     x_col='odom_x',
-    #     y_col='odom_y',
-    #     title='X-Y Position',
-    #     marker='o',
-    #     aspect='equal',
-    #     xlabel='X (m)',
-    #     ylabel='Y (m)',
-    #     window=500,
-    # )
+    odom_fig.add_line(
+        x_col='t_elapsed',
+        y_col=['odom_x', 'odom_y', 'odom_yaw'],
+        title='2D Odom Pose',
+        labels=['odomx', 'odom_y', 'odom_yaw'],
+        marker='',
+        aspect='equal',
+        ls='-',
+        xlabel='Time (sec)',
+        ylabel='Pos (m) and Angle (RAD)',
+        window=500,
+        # box_aspect=1,
+    )
+    odom_fig.add_line(
+        x_col='odom_x',
+        y_col='odom_y',
+        title='X-Y Position',
+        marker='o',
+        aspect='equal',
+        xlabel='X (m)',
+        ylabel='Y (m)',
+        window=500,
+    )
 
     # Plot all three linear accelerations (IMU)
     for each in ['imu_ax', 'imu_ay']:
