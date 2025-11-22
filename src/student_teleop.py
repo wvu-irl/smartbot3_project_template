@@ -19,8 +19,8 @@ def get_key(bot: SmartBot) -> Command:
             if event.key == pygame.K_q:
                 raise KeyboardInterrupt
             if event.key == pygame.K_h:
-                if bot.drawer is not None:
-                    bot.drawer.show_hud = not bot.drawer.show_hud
+                if bot.backend is not None:
+                    bot.backend.show_hud = not bot.backend.show_hud
 
     # Get all pygame keypresses.
     pygame.event.pump()

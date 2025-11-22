@@ -46,7 +46,7 @@ def step(bot: SmartBot, params: Params, states: States) -> None:
     if sensors is None:
         # No data available yet.
         return
-    logger.info(sensors.odom, rate=3)
+    logger.info(sensors.scan, rate=3)
 
     # Do stuff with IMU data.
     # logger.debug(sensors.imu)
@@ -95,7 +95,7 @@ def main(log_filename='smartlog') -> None:
     # bot.init(host='192.168.33.7', port=9090, yaml_path='default_conf.yml')
 
     # Connect to a sim robot.
-    bot = SmartBot(mode='sim2d', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
+    bot = SmartBot(mode='sim', drawing=True, draw_region=((5, 5), (-5, 5)), smartbot_num=3)
     # bot.init(drawing=True, smartbot_num=3)
 
     # Create empty parameter and state objects.
