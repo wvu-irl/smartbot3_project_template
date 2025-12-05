@@ -65,7 +65,7 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
 
     # Update our `states` matrix by inserting our `state_now` vector.
     # state_now.update(sensors.flatten())
-    states.append_row(state_now)
+    states.append_row(rowdict=state_now)
     logger.info(f'\nState (t={state_now["t_elapsed"]}): {state_now}')
 
 
@@ -86,6 +86,7 @@ def main(log_file='smartlog') -> None:
     # bot.init(host='192.168.33.7', port=9090, yaml_path='default_conf.yml')
 
     # Connect to a sim robot.
+    logger.info('Connecting to smartbot...')
     bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
     bot.init(drawing=True, smartbot_num=3)
 
