@@ -1,13 +1,20 @@
 import pygame
 from smartbot_irl import Command
-from smartbot_irl.data import SensorData
 
 
-def get_key_command(sensors: SensorData) -> Command:
+def get_key_command(sensors=None) -> Command:
     """
     Create a :class:`smartbot_irl.Command` object based on keyboard/mouse input.
 
     """
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            raise KeyboardInterrupt
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_q:
+                raise KeyboardInterrupt
+
     pygame.event.pump()
     keys = pygame.key.get_pressed()
     cmd = Command()
