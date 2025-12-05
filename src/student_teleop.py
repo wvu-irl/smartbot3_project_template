@@ -13,7 +13,7 @@ def get_key_command(sensors: SensorData) -> Command:
     cmd = Command()
 
     lin_speed = 2
-    ang_speed = 0.8
+    ang_speed = 12.8
 
     if keys[pygame.K_UP]:
         cmd.linear_vel = lin_speed
@@ -30,20 +30,20 @@ def get_key_command(sensors: SensorData) -> Command:
         cmd.angular_vel = 0.0
 
     if keys[pygame.K_PAGEUP]:
-        print("closing!")
+        print('closing!')
         cmd.gripper_closed = True
     elif keys[pygame.K_PAGEDOWN]:
-        print("opening!")
+        print('opening!')
         cmd.gripper_closed = False
 
     if keys[pygame.K_b]:
-        print("stowing!")
-        cmd.manipulator_presets = "STOW"
+        print('stowing!')
+        cmd.manipulator_presets = 'STOW'
     elif keys[pygame.K_n]:
-        print("holding!")
-        cmd.manipulator_presets = "HOLD"
+        print('holding!')
+        cmd.manipulator_presets = 'HOLD'
     elif keys[pygame.K_m]:
-        print("down-ing!")
-        cmd.manipulator_presets = "DOWN"
+        print('down-ing!')
+        cmd.manipulator_presets = 'DOWN'
 
     return cmd
