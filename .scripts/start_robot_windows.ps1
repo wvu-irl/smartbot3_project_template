@@ -21,7 +21,7 @@ if ($IP -eq "-h" -or $IP -eq "--help") {
     exit 0
 }
 
-$RemoteScript = "/home/smartbot/agent_repos/smartbot3_ws/docker/start.bash"
+$RemoteScript = "~/agent_repos/smartbot3_ws/encase/hardware_software/start.bash"
 $Container = "hardware_software_prod"
 
 ssh -t -t "smartbot@$IP" @"
@@ -72,7 +72,7 @@ if ($IP -eq "-h" -or $IP -eq "--help") {
     exit 0
 }
 
-$RemoteScript = "/home/smartbot/agent_repos/smartbot3_ws/docker/start.bash"
+$RemoteScript = "~/agent_repos/smartbot3_ws/encase/hardware_software/start.bash"
 $Container = "hardware_software_prod"
 
 ssh -t -t "smartbot@$IP" @"

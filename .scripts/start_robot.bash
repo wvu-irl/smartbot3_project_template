@@ -37,7 +37,7 @@ if [[ $# -lt 1 ]]; then
 fi
 
 IP="$1"
-REMOTE_SCRIPT="/home/smartbot/agent_repos/smartbot3_ws/docker/start.bash"
+REMOTE_SCRIPT="~/agent_repos/smartbot3_ws/encase/hardware_software/start.bash"
 CONTAINER="hardware_software_prod"
 
 ssh -tt "smartbot@${IP}" "
