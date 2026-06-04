@@ -16,7 +16,11 @@ logger = SmartLogger(level=logging.WARN)  # Print statements, but better!
 class Params:
     """Put static values in here (e.g. PID values)."""
 
-    goal_point: tuple[float, float] = (1.32, 1.13)
+    ########################
+    #    Set Goal Point    #
+    ########################
+
+    goal_point: tuple[float, float] = (0.0, 0.0)
 
     side_length: float = 2.0
     speed: float = 1.0
@@ -65,8 +69,10 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     #    vvv Your Code Here vvv    #
     ################################
 
-    lin_vel = 0.0
+    goal = params.goal_point
+
     ang_vel = 0.0
+    lin_vel = 0.0
 
     ################################
     #    ^^^ Your Code Here ^^^    #
