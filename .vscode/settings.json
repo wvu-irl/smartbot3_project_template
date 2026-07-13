@@ -72,6 +72,7 @@
         "${workspaceFolder}/src",
         "/opt/ros/jazzy/lib/python3.10/site-packages"
     ],
+    "basedpyright.analysis.useLibraryCodeForTypes": true,
     "basedpyright.venvPath": ".",
     "basedpyright.venv": ".venv",
     "basedpyright.analysis.typeCheckingMode": "basic",
