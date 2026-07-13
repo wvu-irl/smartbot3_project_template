@@ -68,13 +68,13 @@
     "python.envFile": "${workspaceFolder}/.env",
     "python.terminal.activateEnvironment": true,
     "basedpyright.analysis.extraPaths": [
-        "${workspaceFolder}/.venv/",
+        // "${workspaceFolder}/.venv/",
         "${workspaceFolder}/src",
         "/opt/ros/jazzy/lib/python3.10/site-packages"
     ],
     "basedpyright.analysis.useLibraryCodeForTypes": true,
-    "basedpyright.venvPath": ".",
-    "basedpyright.venv": ".venv",
+    // "basedpyright.venvPath": ".",
+    // "basedpyright.venv": ".venv",
     "basedpyright.analysis.typeCheckingMode": "basic",
     "basedpyright.analysis.exclude": [
         "**/build",
