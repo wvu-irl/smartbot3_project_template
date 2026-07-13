@@ -3,32 +3,22 @@
   "tasks": [
     {
       "label": "Start Robot",
-      "type": "shell",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
       "windows": {
-        "command": "powershell.exe",
+        "command": "C:\\Program Files\\Git\\bin\\bash.exe",
         "args": [
-          "-NoLogo",
-          "-NoProfile",
-          "-ExecutionPolicy",
-          "Bypass",
-          "-File",
-          "${workspaceFolder}\\.scripts\\start_robot_windows.ps1",
+          ".scripts/start_robot.bash",
           "${input:RobotIP}",
           "-Mode",
           "${input:RobotMode}"
         ],
-        "options": {
-          "shell": {
-            "executable": "powershell.exe",
-            "args": [
-              "-NoLogo",
-              "-NoProfile",
-              "-ExecutionPolicy",
-              "Bypass",
-              "-Command"
-            ]
-          }
-        }
       },
       "linux": {
         "command": "/usr/bin/bash",
@@ -44,30 +34,20 @@
     },
     {
       "label": "Stop Robot",
-      "type": "shell",
+        "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      },
       "windows": {
-        "command": "powershell.exe",
+        "command": "C:\\Program Files\\Git\\bin\\bash.exe",
         "args": [
-          "-NoLogo",
-          "-NoProfile",
-          "-ExecutionPolicy",
-          "Bypass",
-          "-File",
-          "${workspaceFolder}\\.scripts\\stop_robot_windows.ps1",
+          ".scripts/stop_robot.bash",
           "${input:RobotIP}",
         ],
-        "options": {
-          "shell": {
-            "executable": "powershell.exe",
-            "args": [
-              "-NoLogo",
-              "-NoProfile",
-              "-ExecutionPolicy",
-              "Bypass",
-              "-Command"
-            ]
-          }
-        }
       },
       "linux": {
         "command": "/usr/bin/bash",
