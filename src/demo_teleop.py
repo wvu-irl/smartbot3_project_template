@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 from time import time
 
-from smartbot_irl import SmartBot, SmartBotType
+from smartbot_irl import SmartBot, SmartBotType, Command
 from smartbot_irl.data import State, list_sensor_columns, timestamp
 from smartbot_irl.utils import SmartLogger, check_realtime, logging
 
