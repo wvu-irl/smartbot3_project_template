@@ -145,7 +145,10 @@ def main(log_file='gyro_relog') -> None:
     states = State()  # This gets saved to a CSV.
     params = Params()  # We can access this later in step().
     params.t0 = time()  # Record start time for this run (sec).
-
+    
+    # for resseting the origin
+    bot.write(cmd=Command(reset_position=True))
+    
     # Set up plotting.
     plot_manager = setup_plotting()
     plot_manager.start_plot_proc()
