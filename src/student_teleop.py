@@ -53,4 +53,8 @@ def get_key_command(sensors=None) -> Command:
         print('down-ing!')
         cmd.manipulator_presets = 'DOWN'
 
+    if keys[pygame.K_r]:
+        print('Resetting!')
+        cmd.reset_position = False
+        
     return cmd
