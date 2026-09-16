@@ -95,6 +95,8 @@ def main(log_file='smartlog') -> None:
     params = Params()  # We can access this later in step().
     params.t0 = time()  # Record start time for this run (sec).
 
+    bot.write(Command(reset_position=True))
+    
     # Set up plotting.
     plot_manager = setup_plotting()
     plot_manager.start_plot_proc()
