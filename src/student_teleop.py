@@ -55,6 +55,6 @@ def get_key_command(sensors=None) -> Command:
 
     if keys[pygame.K_r]:
         print('Resetting!')
-        cmd.reset_position = False
+        cmd.reset_position = True
         
     return cmd
