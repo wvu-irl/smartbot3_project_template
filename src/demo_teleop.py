@@ -2,10 +2,10 @@
 from dataclasses import dataclass
 from time import time
 
-from smartbot_irl import SmartBot, SmartBotType, Command
 from smartbot_irl.data import State, list_sensor_columns, timestamp
 from smartbot_irl.utils import SmartLogger, check_realtime, logging
 
+from smartbot_irl import Command, SmartBot, SmartBotType
 from student_plotting import setup_plotting
 from student_teleop import get_key_command
 
@@ -96,7 +96,7 @@ def main(log_file='smartlog') -> None:
     params.t0 = time()  # Record start time for this run (sec).
 
     bot.write(Command(reset_position=True))
-    
+
     # Set up plotting.
     plot_manager = setup_plotting()
     plot_manager.start_plot_proc()

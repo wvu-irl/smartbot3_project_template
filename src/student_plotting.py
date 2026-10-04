@@ -46,6 +46,7 @@ def setup_plotting() -> PlotManager:
         ls='-',
         xlabel='Time (sec)',
         ylabel='Pos (m) and Angle (RAD)',
+        window=500,
         # box_aspect=1,
     )
     odom_fig.add_line(
@@ -56,32 +57,7 @@ def setup_plotting() -> PlotManager:
         aspect='equal',
         xlabel='X (m)',
         ylabel='Y (m)',
+        window=500,
     )
 
-    # Plot all three linear accelerations (IMU)
-    # for each in ['imu_ax', 'imu_ay', 'imu_az']:
-    #     imu_fig.add_line(
-    #         x_col='t_elapsed',
-    #         y_col=[each],
-    #         title=f'{each} Linear Acceleration',
-    #         labels=each,
-    #         marker='',
-    #         # aspect="equal",
-    #         window=500,
-    #         xlabel='Time (sec)',
-    #         ylabel='m/s^2',
-    #     )
-    # # Plot all three linear accelerations (IMU)
-    # for each in ['imu_ax', 'imu_ay', 'imu_az']:
-    #     imu_fig.add_line(
-    #         x_col='t_elapsed',
-    #         y_col=[each],
-    #         title=f'{each} Angular Velocity',
-    #         labels=each,
-    #         marker='',
-    #         # aspect="equal",
-    #         window=500,
-    #         xlabel='Time (sec)',
-    #         ylabel='RAD/s',
-    #     )
     return pm

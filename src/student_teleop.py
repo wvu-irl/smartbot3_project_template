@@ -8,6 +8,10 @@ def get_key_command(sensors=None) -> Command:
 
     """
 
+    lin_speed = 10
+    ang_speed = 5.8
+
+    # Deal with pygame events.
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             raise KeyboardInterrupt
@@ -15,6 +19,7 @@ def get_key_command(sensors=None) -> Command:
             if event.key == pygame.K_q:
                 raise KeyboardInterrupt
 
+    # Get all pygame keypresses.
     pygame.event.pump()
     keys = pygame.key.get_pressed()
     cmd = Command()
