@@ -1,4 +1,5 @@
 import pickle
+
 from smartbot_irl.drawing import PlotManager
 
 
@@ -20,6 +21,8 @@ def setup_plotting() -> PlotManager:
     odom_fig = pm.add_figure(title='Odometry Data')
     # imu_fig = pm.add_figure(title='IMU Data')
     hex_fig = pm.add_figure(title='Hex Data')
+
+    joint_fig = pm.add_figure(title='Joint State')
 
     # Plot first hex pose.
     hex_fig.add_line(
@@ -53,6 +56,46 @@ def setup_plotting() -> PlotManager:
         x_col='odom_x',
         y_col='odom_y',
         title='X-Y Position',
+        marker='o',
+        aspect='equal',
+        xlabel='X (m)',
+        ylabel='Y (m)',
+        window=500,
+    )
+    joint_fig.add_line(
+        x_col='t_elapsed',
+        y_col='left_wheel_pos',
+        title='Left joint Position',
+        marker='o',
+        aspect='equal',
+        xlabel='X (m)',
+        ylabel='Y (m)',
+        window=500,
+    )
+    joint_fig.add_line(
+        x_col='t_elapsed',
+        y_col='right_wheel_pos',
+        title='Right joint Position',
+        marker='o',
+        aspect='equal',
+        xlabel='X (m)',
+        ylabel='Y (m)',
+        window=500,
+    )
+    joint_fig.add_line(
+        x_col='t_elapsed',
+        y_col='right_wheel_vel',
+        title='Right joint Vel',
+        marker='o',
+        aspect='equal',
+        xlabel='X (m)',
+        ylabel='Y (m)',
+        window=500,
+    )
+    joint_fig.add_line(
+        x_col='t_elapsed',
+        y_col='left_wheel_vel',
+        title='Left joint Vel',
         marker='o',
         aspect='equal',
         xlabel='X (m)',

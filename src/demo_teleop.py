@@ -9,7 +9,7 @@ from smartbot_irl import Command, SmartBot, SmartBotType
 from student_plotting import setup_plotting
 from student_teleop import get_key_command
 
-logger = SmartLogger(level=logging.WARN)  # Print statements, but better!
+logger = SmartLogger(level=logging.INFO)  # Print statements, but better!
 
 
 @dataclass
@@ -39,14 +39,11 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
 
     # Get sensor data.
     sensors = bot.read()
-    sensors.imu
 
     # Do stuff with IMU data.
-    logger.debug(sensors.imu)
-    ax = sensors.imu.ax
-    ay = sensors.imu.ay
-    az = sensors.imu.az
-    wz = sensors.imu.wz
+    logger.debug(sensors.joints)
+    imu = sensors.imu
+    ax, ay, az, wz = imu.ax, imu.ay, imu.az, imu.wz
 
     # Add new columns to our state vector.
     state_now['imu_ax'] = ax
@@ -59,14 +56,23 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     state_now['odom_y'] = sensors.odom.y
     state_now['odom_yaw'] = sensors.odom.yaw
 
+    # Add our joint positions.
+    for joint_name in ('left_wheel', 'right_wheel'):
+        state_now[f'{joint_name}_pos'] = sensors.joints.positions[
+            sensors.joints.names.index(joint_name)
+        ]
+        state_now[f'{joint_name}_vel'] = sensors.joints.velocities[
+            sensors.joints.names.index(joint_name)
+        ]
+
     # Get a Command obj using teleop.
     cmd = get_key_command(sensors)
     bot.write(cmd)
 
     # Update our `states` matrix by inserting our `state_now` vector.
-    # state_now.update(sensors.flatten())
+    state_now.update(sensors.flatten())
     states.append_row(rowdict=state_now)
-    logger.info(f'\nState (t={state_now["t_elapsed"]}): {state_now}')
+    logger.info(f'\nState (t={state_now["t_elapsed"]}): {state_now}', rate=1.0)
 
 
 def main(log_file='smartlog') -> None:
@@ -95,7 +101,7 @@ def main(log_file='smartlog') -> None:
     params = Params()  # We can access this later in step().
     params.t0 = time()  # Record start time for this run (sec).
 
-    bot.write(Command(reset_position=True))
+    bot.write(cmd=Command(reset_position=True))
 
     # Set up plotting.
     plot_manager = setup_plotting()
