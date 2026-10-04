@@ -40,7 +40,7 @@ def setup_plotting() -> PlotManager:
 
     # Plot odom pose data.
     odom_fig.add_line(
-        x_col='t_elapsed',
+        x_col='odom_stamp',
         y_col=['odom_x', 'odom_y', 'odom_yaw'],
         title='2D Odom Pose',
         labels=['odomx', 'odom_y', 'odom_yaw'],
@@ -63,7 +63,7 @@ def setup_plotting() -> PlotManager:
         window=500,
     )
     joint_fig.add_line(
-        x_col='t_elapsed',
+        x_col='left_wheel_stamp',
         y_col='left_wheel_pos',
         title='Left joint Position',
         marker='o',
@@ -73,7 +73,7 @@ def setup_plotting() -> PlotManager:
         window=500,
     )
     joint_fig.add_line(
-        x_col='t_elapsed',
+        x_col='right_wheel_stamp',
         y_col='right_wheel_pos',
         title='Right joint Position',
         marker='o',
@@ -83,7 +83,7 @@ def setup_plotting() -> PlotManager:
         window=500,
     )
     joint_fig.add_line(
-        x_col='t_elapsed',
+        x_col='right_wheel_stamp',
         y_col='right_wheel_vel',
         title='Right joint Vel',
         marker='o',
@@ -93,7 +93,7 @@ def setup_plotting() -> PlotManager:
         window=500,
     )
     joint_fig.add_line(
-        x_col='t_elapsed',
+        x_col='left_wheel_stamp',
         y_col='left_wheel_vel',
         title='Left joint Vel',
         marker='o',
