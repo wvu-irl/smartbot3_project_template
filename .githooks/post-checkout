@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "$(git config --get smartbot.cloneConfigured || true)" == true ]]; then
+    exit 0
+fi
+
+# Rename the initial clone remote.
+if ! git remote get-url upstream >/dev/null 2>&1; then
+    git remote rename origin upstream
+fi
+
+echo "running post-checkout hook!"
+git submodule update --init --recursive
+
+# Reserve origin branch name for the student's repository.
+git config branch.main.remote origin
+git config branch.main.merge refs/heads/main
+
+# New branches get origin tracking on their first push.
+# Goal here is that a student can do just `git pull` and it will try to use the
+# origin remote (which they need to setup).
+git config branch.autoSetupMerge false
+git config remote.pushDefault origin
+git config push.default current
+git config push.autoSetupRemote true
+
+git config pull.rebase false
+git config submodule.smartbot_irl.ignore all
+git config smartbot.cloneConfigured true
+
+
