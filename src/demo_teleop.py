@@ -58,17 +58,12 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     state_now['odom_yaw'] = sensors.odom.yaw
     state_now['odom_stamp'] = sensors.odom.stamp_sec
 
-    # Add our joint positions.
-    for joint_name in ('left_wheel', 'right_wheel'):
-        state_now[f'{joint_name}_pos'] = sensors.joints.positions[
-            sensors.joints.names.index(joint_name)
-        ]
-        state_now[f'{joint_name}_vel'] = sensors.joints.velocities[
-            sensors.joints.names.index(joint_name)
-        ]
-
-        # Add time stamps.
-        state_now[f'{joint_name}_stamp'] = sensors.joints.stamp_sec
+    # Get our JointState data.
+    state_now['left_vel'] = sensors.joints.left_vel
+    state_now['right_vel'] = sensors.joints.right_vel
+    state_now['left_pos'] = sensors.joints.left_pos
+    state_now['right_pos'] = sensors.joints.right_pos
+    state_now['joint_stamp'] = sensors.joints.stamp_sec
 
     # Get a Command obj using teleop.
     cmd = get_key_command(sensors)

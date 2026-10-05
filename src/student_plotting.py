@@ -63,8 +63,8 @@ def setup_plotting() -> PlotManager:
         window=500,
     )
     joint_fig.add_line(
-        x_col='left_wheel_stamp',
-        y_col='left_wheel_pos',
+        x_col='joint_stamp',
+        y_col='left_pos',
         title='Left joint Position',
         marker='o',
         aspect='equal',
@@ -73,8 +73,8 @@ def setup_plotting() -> PlotManager:
         window=500,
     )
     joint_fig.add_line(
-        x_col='right_wheel_stamp',
-        y_col='right_wheel_pos',
+        x_col='joint_stamp',
+        y_col='right_pos',
         title='Right joint Position',
         marker='o',
         aspect='equal',
@@ -83,8 +83,8 @@ def setup_plotting() -> PlotManager:
         window=500,
     )
     joint_fig.add_line(
-        x_col='right_wheel_stamp',
-        y_col='right_wheel_vel',
+        x_col='joint_stamp',
+        y_col='right_vel',
         title='Right joint Vel',
         marker='o',
         aspect='equal',
@@ -93,8 +93,8 @@ def setup_plotting() -> PlotManager:
         window=500,
     )
     joint_fig.add_line(
-        x_col='left_wheel_stamp',
-        y_col='left_wheel_vel',
+        x_col='joint_stamp',
+        y_col='left_vel',
         title='Left joint Vel',
         marker='o',
         aspect='equal',
