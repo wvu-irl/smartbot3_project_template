@@ -159,6 +159,7 @@ def main(log_file='gyro_relog') -> None:
     except KeyboardInterrupt:
         logger.info('User requesting shut down...')
     finally:
+        bot.write(Command(linear_vel=0.0, angular_vel=0.0))
         # Save data to a CSV file and cleanup ros+matplotlib objects.
         log_filename = f'{log_file}_{timestamp()}.csv'
         states.to_csv(log_filename)
