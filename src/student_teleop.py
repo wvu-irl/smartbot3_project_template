@@ -1,4 +1,5 @@
 import pygame
+
 from smartbot_irl import Command
 
 
@@ -24,8 +25,8 @@ def get_key_command(sensors=None) -> Command:
     keys = pygame.key.get_pressed()
     cmd = Command()
 
-    lin_speed = 2
-    ang_speed = 12.8
+    lin_speed = 0.16
+    ang_speed = 0.4
 
     if keys[pygame.K_UP]:
         cmd.linear_vel = lin_speed
@@ -61,5 +62,5 @@ def get_key_command(sensors=None) -> Command:
     if keys[pygame.K_r]:
         print('Resetting!')
         cmd.reset_position = True
-        
+
     return cmd
