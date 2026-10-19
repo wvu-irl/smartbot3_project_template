@@ -1,6 +1,7 @@
 # steer_to_waypoint.py, here robot steers to waypoint adjusting the linear and rotational error.
 import math
 from dataclasses import dataclass
+from random import random
 from time import time
 
 import numpy as np
@@ -22,9 +23,12 @@ class Params:
     linear_gain = 1
     rotational_gain = 2
     goal_x: float = 0.0
-    goal_y: float = 1.0
+    goal_y: float = 0.0
     heading_tol: float = 0.01  # rad (~0.5 deg) -- how close is "facing the waypoint"
     distance_tol: float = 0.1  # m -- how close is "at the waypoint"
+
+    goal_timeout = 30.0  # max time to reach goal in seconds
+    start_time = 0.0  # When was this goal chosen? (s)
 
 
 def step(bot: SmartBotType, params: Params, states: State) -> None:
@@ -63,6 +67,27 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     state_now['odom_y'] = sensors.odom.y
     state_now['odom_yaw'] = sensors.odom.yaw
 
+    ###########################
+    #   Goal Choosing Stuff   #
+    ###########################
+
+    # Have we timed out of the goal?
+    if params.start_time + params.goal_timeout < t:
+        print('Could not reach goal in time, choosing new goal')
+
+        # Choose a new goal in a 2m radius
+        theta = 2 * math.pi * random()
+        radius = math.sqrt(random())
+
+        delta_x = radius * math.cos(theta)
+        delta_y = radius * math.sin(theta)
+
+        params.goal_x = sensors.odom.x + delta_x
+        params.goal_y = sensors.odom.y + delta_y
+        params.start_time = t
+
+        print(f'New Goal Selected: ({params.goal_x},{params.goal_y})')
+
     ##########################
     #   Obstacle Avoidance   #
     ##########################
@@ -99,7 +124,20 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     if goal_dist < params.distance_tol:
         lin_vel = 0.0
         ang_vel = 0.0
-        print('reached goal point')
+        print('Reached goal point!')
+
+        # Choose a new goal in a 2m radius
+        theta = 2 * math.pi * random()
+        radius = math.sqrt(random())
+
+        delta_x = radius * math.cos(theta)
+        delta_y = radius * math.sin(theta)
+
+        params.goal_x = sensors.odom.x + delta_x
+        params.goal_y = sensors.odom.y + delta_y
+        params.start_time = t
+
+        print(f'New Goal Selected: ({params.goal_x},{params.goal_y})')
 
     # If there is no lidar data, or if all things are super far away, just move w/ a P controller
     elif len(lidar_ranges) == 0 or min(lidar_ranges) > 0.45:
@@ -145,8 +183,8 @@ def main(log_file='gyro_relog') -> None:
     #######################
 
     # Connect to a real robot.
-    bot = SmartBot(mode='real', drawing=True, smartbot_num=2)
-    bot.init(host='192.168.33.2', port=9090, yaml_path='default_conf.yml')
+    bot = SmartBot(mode='real', drawing=True, smartbot_num=7)
+    bot.init(host='192.168.33.7', port=9090, yaml_path='default_conf.yml')
 
     # Connect to a sim robot.
     logger.info('Connecting to smartbot...')

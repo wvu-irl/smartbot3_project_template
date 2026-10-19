@@ -14,6 +14,7 @@ def dynamic_window_planner(
     max_angular_speed: float = 0.4,
     prediction_length: float = 2.0,
     prediction_dt: float = 0.1,
+    buffer: float = 0.01,
 ):
 
     # If we need to, convert the lists to numpy objects
@@ -97,7 +98,7 @@ def dynamic_window_planner(
                     min_dist = cur_min
 
                     # Do we collide?
-                    if min_dist < robot_radius:
+                    if min_dist < robot_radius + buffer:
                         collision = True
                         break
 

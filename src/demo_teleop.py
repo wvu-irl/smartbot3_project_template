@@ -82,8 +82,8 @@ def main(log_file='smartlog') -> None:
     """
 
     # Connect to a real robot.
-    bot = SmartBot(mode='real', drawing=True, smartbot_num=2)
-    bot.init(host='192.168.33.2', port=9090, yaml_path='default_conf.yml')
+    bot = SmartBot(mode='real', drawing=True, smartbot_num=7)
+    bot.init(host='192.168.33.7', port=9090, yaml_path='default_conf.yml')
 
     # Connect to a sim robot.
     logger.info('Connecting to smartbot...')
