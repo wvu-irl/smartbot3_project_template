@@ -1,4 +1,5 @@
 import pickle
+
 from smartbot_irl.drawing import PlotManager
 
 
@@ -17,9 +18,10 @@ def setup_plotting() -> PlotManager:
     pm = PlotManager()
 
     # Create two windows.
-    odom_fig = pm.add_figure(title='Odometry Data')
+    odom_fig = pm.create_figure(title='Odometry Data')
     # imu_fig = pm.add_figure(title='IMU Data')
-    hex_fig = pm.add_figure(title='Hex Data')
+    hex_fig = pm.create_figure(title='Hex Data')
+    joint_fig = pm.create_figure(title='Joint Data')
 
     # Plot first hex pose.
     hex_fig.add_line(
@@ -53,6 +55,27 @@ def setup_plotting() -> PlotManager:
         x_col='odom_x',
         y_col='odom_y',
         title='X-Y Position',
+        marker='o',
+        aspect='equal',
+        xlabel='X (m)',
+        ylabel='Y (m)',
+        window=500,
+    )
+
+    joint_fig.add_line(
+        x_col='t_elapsed',
+        y_col='left_vel',
+        title='Joint Velocities (R)',
+        marker='o',
+        aspect='equal',
+        xlabel='X (m)',
+        ylabel='Y (m)',
+        window=500,
+    )
+    joint_fig.add_line(
+        x_col='t_elapsed',
+        y_col='right_vel',
+        title='Joint Velocities (R)',
         marker='o',
         aspect='equal',
         xlabel='X (m)',

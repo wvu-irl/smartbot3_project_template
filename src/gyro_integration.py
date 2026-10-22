@@ -98,7 +98,7 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     # Get sensor data. Gyro rates about body x, y, z = (p, q, r).
     sensors = bot.read()
     wx, wy, wz = sensors.imu.wx, sensors.imu.wy, sensors.imu.wz
-
+    logger.warn(f'{sensors.joints.left_vel}')
     # Read the keyboard every step (also lets the user quit with 'q').
     cmd = get_key_command(sensors)
 

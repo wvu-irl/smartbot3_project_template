@@ -59,6 +59,9 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     state_now['odom_y'] = sensors.odom.y
     state_now['odom_yaw'] = sensors.odom.yaw
 
+    state_now['left_vel'] = sensors.joints.left_vel
+    state_now['right_vel'] = sensors.joints.right_vel
+
     # Get a Command obj using teleop.
     cmd = get_key_command(sensors)
     bot.write(cmd)
@@ -82,13 +85,13 @@ def main(log_file='smartlog') -> None:
     """
 
     # Connect to a real robot.
-    bot = SmartBot(mode='real', drawing=True, smartbot_num=7)
-    bot.init(host='192.168.33.7', port=9090, yaml_path='default_conf.yml')
+    # bot = SmartBot(mode='real', drawing=True, smartbot_num=7)
+    # bot.init(host='192.168.33.7', port=9090, yaml_path='default_conf.yml')
 
     # Connect to a sim robot.
     logger.info('Connecting to smartbot...')
-    # bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=4)
-    # bot.init(drawing=True, smartbot_num=4)
+    bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=4)
+    bot.init(drawing=True, smartbot_num=4)
 
     # Create empty parameter and state objects.
     states = State()  # This gets saved to a CSV.
