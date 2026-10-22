@@ -144,7 +144,7 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
 def setup_plotting() -> PlotManager:
     """Plot the gyro rates and the estimated Euler angles."""
     pm = PlotManager()
-    fig = pm.add_figure(title='Gyro Integration')
+    fig = pm.create_figure(title='Gyro Integration')
 
     fig.add_line(
         x_col='t_elapsed',
@@ -184,13 +184,13 @@ def main(log_file='gyro_log') -> None:
     """
 
     # Connect to a real robot.
-    bot = SmartBot(mode='real', drawing=True, smartbot_num=6)
-    bot.init(host='192.168.33.6', port=9090, yaml_path='default_conf.yml')
+    # bot = SmartBot(mode='real', drawing=True, smartbot_num=6)
+    # bot.init(host='192.168.33.6', port=9090, yaml_path='default_conf.yml')
 
     # Connect to a sim robot.
     # logger.info('Connecting to smartbot...')
-    # bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
-    # bot.init(drawing=True, smartbot_num=3)
+    bot = SmartBot(mode='sim', drawing=True, draw_region=((-10, 10), (-10, 10)), smartbot_num=3)
+    bot.init(drawing=True, smartbot_num=3)
 
     # Create empty parameter and state objects.
     states = State()  # This gets saved to a CSV.
