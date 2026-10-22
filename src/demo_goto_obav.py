@@ -12,6 +12,7 @@ from smartbot_irl.utils import SmartLogger, check_realtime, logging
 from smartbot_irl import Command, SmartBot, SmartBotType
 from student_dwa import dynamic_window_planner
 from student_plotting import setup_plotting
+from student_teleop import get_key_command
 
 logger = SmartLogger(level=logging.WARN)  # Print statements, but better!
 
@@ -71,19 +72,16 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
     #   Goal Choosing Stuff   #
     ###########################
 
+    reset = get_key_command(sensors)
+
     # Have we timed out of the goal?
     if params.start_time + params.goal_timeout < t:
         print('Could not reach goal in time, choosing new goal')
 
-        # Choose a new goal in a 2m radius
-        theta = 2 * math.pi * random()
-        radius = math.sqrt(random())
+        # Choose a new goal in a 2m square centered on (0,0)
 
-        delta_x = radius * math.cos(theta)
-        delta_y = radius * math.sin(theta)
-
-        params.goal_x = sensors.odom.x + delta_x
-        params.goal_y = sensors.odom.y + delta_y
+        params.goal_x = 2 * random() - 1.0
+        params.goal_y = 2 * random() - 1.0
         params.start_time = t
 
         print(f'New Goal Selected: ({params.goal_x},{params.goal_y})')
@@ -112,13 +110,13 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
 
     # Calculate Distance to Goal
     goal_dist = np.sqrt(goal_dx**2 + goal_dy**2)
-    print(f'distance to the goal is {goal_dist}')
+    # print(f'distance to the goal is {goal_dist}')
 
     # Calculate Heading Error
     desired_heading = math.atan2(goal_dy, goal_dx)
     raw_heading_error = desired_heading - sensors.odom.yaw
     heading_error = math.atan2(math.sin(raw_heading_error), math.cos(raw_heading_error))
-    print(f'heading error is  {heading_error}')
+    # print(f'heading error is  {heading_error}')
 
     # If we are at the goal
     if goal_dist < params.distance_tol:
@@ -126,15 +124,10 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
         ang_vel = 0.0
         print('Reached goal point!')
 
-        # Choose a new goal in a 2m radius
-        theta = 2 * math.pi * random()
-        radius = math.sqrt(random())
+        # Choose a new goal in a 2m square centered on (0,0)
 
-        delta_x = radius * math.cos(theta)
-        delta_y = radius * math.sin(theta)
-
-        params.goal_x = sensors.odom.x + delta_x
-        params.goal_y = sensors.odom.y + delta_y
+        params.goal_x = 2 * random() - 1.0
+        params.goal_y = 2 * random() - 1.0
         params.start_time = t
 
         print(f'New Goal Selected: ({params.goal_x},{params.goal_y})')
@@ -158,6 +151,7 @@ def step(bot: SmartBotType, params: Params, states: State) -> None:
 
     # Write output to Command
     cmd = Command(linear_vel=lin_vel, angular_vel=ang_vel)
+    cmd.reset_position = reset.reset_position
     bot.write(cmd)
 
     # Update our `states` matrix by inserting our `state_now` vector.

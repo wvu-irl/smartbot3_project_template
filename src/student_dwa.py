@@ -14,7 +14,7 @@ def dynamic_window_planner(
     max_angular_speed: float = 0.4,
     prediction_length: float = 2.0,
     prediction_dt: float = 0.1,
-    buffer: float = 0.01,
+    buffer: float = 0.03,
 ):
 
     # If we need to, convert the lists to numpy objects
