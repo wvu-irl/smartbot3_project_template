@@ -1,7 +1,7 @@
 import math
 
 import numpy as np
-from smartbot_irl.data._type_maps import Odometry
+from smartbot_irl.types import Odometry
 
 
 def dynamic_window_planner(
